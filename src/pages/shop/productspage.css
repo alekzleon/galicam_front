@@ -72,7 +72,7 @@
   background: #fff;
   padding: 0 16px;
   font-weight: 600;
-  color: #13426b;
+  color: #8b6a20;
   cursor: pointer;
 }
 
@@ -132,7 +132,7 @@
   border: 1px solid #cfe0ec;
   border-radius: 999px;
   background: #eef7fb;
-  color: #13426b;
+  color: #8b6a20;
   font-size: 13px;
   font-weight: 700;
   line-height: 1.2;
@@ -170,7 +170,7 @@
   padding: 0 14px;
   cursor: pointer;
   font-weight: 600;
-  color: #13426b;
+  color: #8b6a20;
 }
 
 .products-page__page-btn {
@@ -188,9 +188,9 @@
 }
 
 .products-page__page-number.is-active {
-  background: #13426b;
+  background: #8b6a20;
   color: #fff;
-  border-color: #13426b;
+  border-color: #8b6a20;
 }
 
 .products-page__page-btn:disabled {

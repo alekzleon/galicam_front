@@ -94,7 +94,7 @@
   padding: 0 20px;
   border-radius: 8px;
   background: #ffffff;
-  color: #13426b;
+  color: #8b6a20;
   font-size: 14px;
   font-weight: 700;
   box-shadow: var(--shadow-soft);
@@ -117,7 +117,7 @@
   border: none;
   border-radius: 999px;
   background: rgba(255, 255, 255, 0.96);
-  color: #13426b;
+  color: #8b6a20;
   font-size: 30px;
   line-height: 1;
   box-shadow: var(--shadow-card);

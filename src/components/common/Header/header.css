@@ -216,7 +216,7 @@
 .editorial-nav__dropdown-toggle--pill {
   min-height: 38px;
   border-radius: 999px;
-  background: #75bfe1;
+  background: #b08a2f;
   color: #ffffff;
   padding: 0 1rem;
 }
@@ -876,14 +876,14 @@
   inset: 18px;
   border-radius: 10px;
   background:
-    linear-gradient(90deg, transparent 24%, rgba(142, 205, 229, 0.18) 24% 26%, transparent 26% 49%, rgba(142, 205, 229, 0.18) 49% 51%, transparent 51% 74%, rgba(142, 205, 229, 0.18) 74% 76%, transparent 76%),
-    linear-gradient(0deg, transparent 24%, rgba(142, 205, 229, 0.18) 24% 26%, transparent 26% 49%, rgba(142, 205, 229, 0.18) 49% 51%, transparent 51% 74%, rgba(142, 205, 229, 0.18) 74% 76%, transparent 76%);
+    linear-gradient(90deg, transparent 24%, rgba(176, 138, 47, 0.18) 24% 26%, transparent 26% 49%, rgba(176, 138, 47, 0.18) 49% 51%, transparent 51% 74%, rgba(176, 138, 47, 0.18) 74% 76%, transparent 76%),
+    linear-gradient(0deg, transparent 24%, rgba(176, 138, 47, 0.18) 24% 26%, transparent 26% 49%, rgba(176, 138, 47, 0.18) 49% 51%, transparent 51% 74%, rgba(176, 138, 47, 0.18) 74% 76%, transparent 76%);
 }
 
 .header-regions__continent {
   position: absolute;
   display: block;
-  background: #97cfe6;
+  background: #d3bd7a;
   opacity: 0.95;
 }
 

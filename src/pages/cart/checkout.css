@@ -538,7 +538,7 @@
 }
 
 .checkout_coupon_row span:first-child {
-  color: #13426b;
+  color: #8b6a20;
   font-weight: 800;
 }
 
@@ -608,7 +608,7 @@
 }
 
 .checkout_loyalty_summary_head i {
-  color: #13426b;
+  color: #8b6a20;
 }
 
 .checkout_loyalty_summary > div:not(.checkout_loyalty_summary_head) {

@@ -294,7 +294,7 @@ body {
   border: 1px solid #dbe4ee;
   border-radius: 8px;
   background: #ffffff;
-  color: #13426b;
+  color: #8b6a20;
   cursor: pointer;
   box-shadow: 0 8px 18px rgba(15, 23, 42, 0.08);
 }
@@ -347,7 +347,7 @@ body {
   width: 14px;
   height: 14px;
   margin: 0;
-  accent-color: #13426b;
+  accent-color: #8b6a20;
 }
 
 .footer_benefit_actions {
@@ -370,8 +370,8 @@ body {
 }
 
 .footer_benefit_actions button.is-primary {
-  border-color: #13426b;
-  background: #13426b;
+  border-color: #8b6a20;
+  background: #8b6a20;
   color: #ffffff;
 }
 
@@ -525,7 +525,7 @@ body {
 }
 
 .f_subscribe_two .form-control:focus {
-  border-color: #13426b;
+  border-color: #8b6a20;
 }
 
 .btn {
@@ -543,7 +543,7 @@ body {
 }
 
 .btn_get_two:hover {
-  background: #13426b;
+  background: #8b6a20;
   color: #fff;
 }
 
@@ -579,8 +579,8 @@ body {
 
 .btn_get:hover {
   color: #fff;
-  background: #13426b;
-  border-color: #13426b;
+  background: #8b6a20;
+  border-color: #8b6a20;
   box-shadow: none;
 }
 
@@ -595,7 +595,7 @@ button:focus {
 }
 
 .new_footer_top .f_widget.about-widget .f_list li a:hover {
-  color: #13426b;
+  color: #8b6a20;
 }
 
 .new_footer_top .f_widget.about-widget .f_list li {
@@ -643,20 +643,20 @@ button:focus {
 
 .btn_get_two {
   box-shadow: none;
-  background: #13426b;
-  border-color: #13426b;
+  background: #8b6a20;
+  border-color: #8b6a20;
   color: #fff;
 }
 
 .btn_get_two:hover {
-  background: #13426b;
-  border-color: #13426b;
+  background: #8b6a20;
+  border-color: #8b6a20;
   color: #fff;
 }
 
 .new_footer_top .company_widget .f_subscribe_two .btn_get_two {
-  background: #13426b;
-  border-color: #13426b;
+  background: #8b6a20;
+  border-color: #8b6a20;
   color: #fff;
 }
 
@@ -668,8 +668,8 @@ button:focus {
 }
 
 .new_footer_top .f_social_icon a:hover {
-  background: #13426b;
-  border-color: #13426b;
+  background: #8b6a20;
+  border-color: #8b6a20;
   color: white;
 }
 
@@ -858,7 +858,7 @@ h6 {
 
 .footer_inline_icon {
   margin-right: 10px;
-  color: #13426b;
+  color: #8b6a20;
   font-size: 11px;
   vertical-align: middle;
 }
@@ -871,7 +871,7 @@ h6 {
   width: 11px;
   min-width: 11px;
   margin-right: 10px;
-  color: #13426b;
+  color: #8b6a20;
   text-align: center;
 }
 

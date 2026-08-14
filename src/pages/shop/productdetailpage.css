@@ -440,8 +440,8 @@
 }
 
 .product-detail__thumb.is-active {
-  border-color: #13426b;
-  box-shadow: 0 0 0 1px #13426b inset;
+  border-color: #8b6a20;
+  box-shadow: 0 0 0 1px #8b6a20 inset;
 }
 
 .product-detail__thumb img {
@@ -588,7 +588,7 @@
   border: 1px solid #bfdbfe;
   border-radius: 999px;
   background: #eff6ff;
-  color: #13426b;
+  color: #8b6a20;
   padding: 5px 10px;
   font-size: 12px;
   font-weight: 800;
@@ -658,7 +658,7 @@
   min-height: 52px;
   font-size: 20px;
   font-weight: 700;
-  color: #13426b;
+  color: #8b6a20;
 }
 
 .product-detail__purchase-box,
@@ -709,7 +709,7 @@
   background: #fff;
   font-size: 20px;
   cursor: pointer;
-  color: #13426b;
+  color: #8b6a20;
 }
 
 .product-detail__qty-control span {
@@ -737,14 +737,14 @@
 
 .product-detail__primary-btn {
   border: none;
-  background: #13426b;
+  background: #8b6a20;
   color: #ffffff;
 }
 
 .product-detail__secondary-btn {
   border: 1px solid #dbe3ea;
   background: #ffffff;
-  color: #13426b;
+  color: #8b6a20;
 }
 
 .product-detail__primary-btn:disabled,
@@ -886,8 +886,8 @@
 }
 
 .product-detail__variant-value.is-selected {
-  border-color: #13426b;
-  box-shadow: 0 0 0 1px #13426b inset;
+  border-color: #8b6a20;
+  box-shadow: 0 0 0 1px #8b6a20 inset;
   background: #f0f7ff;
 }
 
@@ -971,8 +971,8 @@
 }
 
 .product-detail__variant-card.is-selected {
-  border-color: #13426b;
-  box-shadow: 0 0 0 1px #13426b inset;
+  border-color: #8b6a20;
+  box-shadow: 0 0 0 1px #8b6a20 inset;
   background: #f0f7ff;
 }
 
@@ -1028,7 +1028,7 @@
   width: 22px;
   height: 22px;
   border-radius: 999px;
-  background: #13426b;
+  background: #8b6a20;
   color: #ffffff;
   display: inline-flex;
   align-items: center;
@@ -1063,7 +1063,7 @@
 }
 
 .product-detail__promo-scale strong {
-  color: #13426b;
+  color: #8b6a20;
   font-size: 13px;
   font-weight: 900;
   text-align: right;
@@ -1090,7 +1090,7 @@
 }
 
 .product-detail__scale-row strong {
-  color: #13426b;
+  color: #8b6a20;
   font-weight: 900;
 }
 
@@ -1160,7 +1160,7 @@
 }
 
 .product-detail__html-description a {
-  color: #13426b;
+  color: #8b6a20;
   font-weight: 700;
 }
 
@@ -1292,8 +1292,8 @@
 }
 
 .product-lightbox__thumb.is-active {
-  border-color: #13426b;
-  box-shadow: 0 0 0 1px #13426b inset;
+  border-color: #8b6a20;
+  box-shadow: 0 0 0 1px #8b6a20 inset;
 }
 
 .product-lightbox__thumb img {

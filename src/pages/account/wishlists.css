@@ -71,7 +71,7 @@
   min-height: 38px;
   border: none;
   border-radius: 8px;
-  background: #13426b;
+  background: #8b6a20;
   color: #ffffff;
   font-size: 13px;
   font-weight: 800;
@@ -102,7 +102,7 @@
 }
 
 .wishlists-page__list-btn.is-active {
-  border-color: #13426b;
+  border-color: #8b6a20;
   background: #f0f6fb;
 }
 

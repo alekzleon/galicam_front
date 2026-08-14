@@ -113,7 +113,7 @@
   display: -webkit-box;
   margin: 0;
   overflow: hidden;
-  color: #13426b;
+  color: #8b6a20;
   font-size: 14px;
   font-weight: 800;
   line-height: 1.35;
@@ -143,7 +143,7 @@
 }
 
 .offers-page__meta strong {
-  color: #13426b;
+  color: #8b6a20;
 }
 
 .offers-page__actions {
@@ -168,15 +168,15 @@
 }
 
 .offers-page__action--primary {
-  border-color: #13426b;
-  background: #13426b;
+  border-color: #8b6a20;
+  background: #8b6a20;
   color: #ffffff;
 }
 
 .offers-page__action--secondary {
   border-color: #dbe3ea;
   background: #ffffff;
-  color: #13426b;
+  color: #8b6a20;
 }
 
 .offers-page__action:disabled {
@@ -218,7 +218,7 @@
   justify-content: center;
   padding: 0 16px;
   border-radius: 8px;
-  background: #13426b;
+  background: #8b6a20;
   color: #ffffff;
   font-size: 14px;
   font-weight: 700;
@@ -242,14 +242,14 @@
   border: 1px solid #dbe3ea;
   border-radius: 8px;
   background: #ffffff;
-  color: #13426b;
+  color: #8b6a20;
   font-weight: 600;
   cursor: pointer;
 }
 
 .offers-page__page-number.is-active {
-  border-color: #13426b;
-  background: #13426b;
+  border-color: #8b6a20;
+  background: #8b6a20;
   color: #ffffff;
 }
 

@@ -71,7 +71,7 @@
   width: 4px;
   height: 26px;
   border-radius: 999px;
-  background: #13426b;
+  background: #8b6a20;
 }
 
 .contact-section-title h2 {
@@ -130,7 +130,7 @@
 
 .contact-form__field input:focus,
 .contact-form__field textarea:focus {
-  border-color: #13426b;
+  border-color: #8b6a20;
   box-shadow: 0 0 0 3px rgba(19, 66, 107, 0.12);
 }
 
@@ -152,7 +152,7 @@
 }
 
 .contact-form__submit:hover {
-  background: #13426b;
+  background: #8b6a20;
   transform: translateY(-1px);
 }
 
@@ -265,7 +265,7 @@
   min-width: 28px;
   border-radius: 50%;
   background: #eef6fb;
-  color: #13426b;
+  color: #8b6a20;
   font-size: 18px;
   transition: transform 0.2s ease;
 }
@@ -286,7 +286,7 @@
 }
 
 .contact-faq__answer a {
-  color: #13426b;
+  color: #8b6a20;
   font-weight: 700;
 }
 

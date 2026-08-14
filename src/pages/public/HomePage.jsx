@@ -1,5 +1,6 @@
 import HeroBanner from "../../components/home/HeroBanner/HeroBanner"
 import NewProductsCarousel from "../../components/home/NewProductsCarousel/NewProductsCarousel"
+import PopularSearchesSection from "../../components/home/PopularSearchesSection/PopularSearchesSection"
 import ArtisanSelection from "../../components/home/ArtisanSelection/ArtisanSelection"
 import LatestPurchases from "../../components/home/LatestPurchases/LatestPurchases"
 import MonthlyPromotions from "../../components/home/MonthlyPromotions/MonthlyPromotions"
@@ -11,6 +12,7 @@ function HomePage() {
     <main className="public-home public-home--classic">
       <HeroBanner />
       <NewProductsCarousel />
+      <PopularSearchesSection />
       <LatestPurchases source="favorites" />
       <LatestPurchases />
       <ArtisanSelection />

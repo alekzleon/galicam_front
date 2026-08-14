@@ -551,7 +551,7 @@
   place-items: center;
   border-radius: 10px;
   background: #eef2ff;
-  color: #13426b;
+  color: #8b6a20;
 }
 
 .summary_loyalty_head strong,
@@ -621,7 +621,7 @@
 }
 
 .summary_cashback_form input:focus {
-  border-color: #13426b;
+  border-color: #8b6a20;
   box-shadow: 0 0 0 3px rgba(19, 66, 107, 0.12);
 }
 
@@ -647,7 +647,7 @@
 }
 
 .summary_coupon_head i {
-  color: #13426b;
+  color: #8b6a20;
   font-size: 1rem;
   line-height: 1.3;
 }
@@ -687,9 +687,9 @@
 .summary_coupon_form button,
 .summary_coupon_clear {
   min-height: 38px;
-  border: 1px solid #13426b;
+  border: 1px solid #8b6a20;
   border-radius: 8px;
-  background: #13426b;
+  background: #8b6a20;
   color: #ffffff;
   font-size: 0.82rem;
   font-weight: 900;
@@ -1067,7 +1067,7 @@
   flex: 0 0 auto;
   border-radius: 999px;
   background: #dbeafe;
-  color: #13426b;
+  color: #8b6a20;
   padding: 4px 8px;
   font-size: 10px;
   font-weight: 900;
@@ -1096,7 +1096,7 @@
 }
 
 .cart_item_scale strong {
-  color: #13426b;
+  color: #8b6a20;
   font-size: 12px;
   font-weight: 900;
   text-align: right;
@@ -1117,7 +1117,7 @@
 }
 
 .cart_item_scale_promo > small {
-  color: #13426b;
+  color: #8b6a20;
   font-size: 11px;
   font-weight: 800;
   line-height: 1.4;
