@@ -1,0 +1,63 @@
+.inline-setting-editor {
+  display: inline-flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 0.35rem;
+  max-width: 100%;
+  min-width: 0;
+}
+
+.inline-setting-editor__text {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.inline-setting-editor--wrap .inline-setting-editor__text {
+  overflow: visible;
+  text-overflow: clip;
+  white-space: normal;
+  overflow-wrap: anywhere;
+}
+
+.inline-setting-editor__input {
+  width: min(100%, 260px);
+  min-height: 32px;
+  border: 1px solid #cbd5e1;
+  border-radius: 8px;
+  background: #ffffff;
+  color: #0f172a;
+  font-size: 0.86rem;
+  padding: 0.38rem 0.55rem;
+  outline: none;
+}
+
+.inline-setting-editor__input:focus {
+  border-color: #94a3b8;
+  box-shadow: 0 0 0 3px rgba(148, 163, 184, 0.16);
+}
+
+.inline-setting-editor__button {
+  width: 28px;
+  height: 28px;
+  flex: 0 0 auto;
+  border: 1px solid #dbe4ee;
+  border-radius: 8px;
+  background: #ffffff;
+  color: #13426b;
+  display: inline-grid;
+  place-items: center;
+  cursor: pointer;
+}
+
+.inline-setting-editor__button--save {
+  border-color: #bbf7d0;
+  background: #f0fdf4;
+  color: #16a34a;
+}
+
+.inline-setting-editor__button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}

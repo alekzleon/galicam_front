@@ -1,0 +1,245 @@
+.admin-sidebar {
+  width: var(--admin-sidebar-width);
+  background: #ededee;
+  border-right: 1px solid var(--admin-border);
+  display: flex;
+  flex-direction: column;
+  min-height: 100%;
+  padding: 12px 10px;
+}
+
+.admin-sidebar__top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  padding: 4px 6px 12px;
+  border-bottom: 1px solid #dedfe2;
+}
+
+.admin-sidebar__brand {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-width: 0;
+}
+
+.admin-sidebar__brand-logo {
+  width: 30px;
+  height: 30px;
+  border-radius: 8px;
+  background: #111827;
+  color: #fff;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 800;
+  font-size: 1rem;
+  overflow: hidden;
+  flex: 0 0 auto;
+}
+
+.admin-sidebar__brand-logo img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  background: #ffffff;
+}
+
+.admin-sidebar__brand-copy {
+  min-width: 0;
+}
+
+.admin-sidebar__brand-title {
+  margin: 0;
+  font-size: 0.94rem;
+  line-height: 1.1;
+  font-weight: 800;
+  color: #111827;
+}
+
+.admin-sidebar__brand-subtitle {
+  margin: 2px 0 0;
+  font-size: 0.68rem;
+  color: #777b82;
+}
+
+.admin-sidebar__brand-action {
+  width: 30px;
+  height: 30px;
+  border: 0;
+  border-radius: 8px;
+  background: #e4e5e7;
+  color: #6b7280;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+
+.admin-sidebar__nav {
+  flex: 1;
+  overflow: auto;
+  padding: 10px 0;
+}
+
+.admin-sidebar__group + .admin-sidebar__group {
+  margin-top: 16px;
+}
+
+.admin-sidebar__group-title {
+  min-height: 24px;
+  margin: 0 0 4px;
+  padding: 0 12px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  color: #6c7179;
+  font-size: 0.76rem;
+  font-weight: 800;
+  letter-spacing: 0;
+  text-transform: none;
+}
+
+.admin-sidebar__group-links {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+}
+
+.admin-sidebar__link {
+  min-height: 33px;
+  border-radius: 9px;
+  padding: 6px 10px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  color: #2f3338;
+  font-weight: 700;
+  transition: background-color 0.16s ease, color 0.16s ease;
+}
+
+.admin-sidebar__link:hover {
+  background: #e2e3e6;
+  color: #171717;
+}
+
+.admin-sidebar__link--active {
+  background: #ffffff;
+  color: #111827;
+  font-weight: 800;
+  box-shadow: 0 1px 2px rgba(15, 23, 42, 0.06);
+}
+
+.admin-sidebar__link-icon {
+  width: 20px;
+  height: 20px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  color: #303236;
+  font-size: 1rem;
+}
+
+.admin-sidebar__link--active .admin-sidebar__link-icon {
+  color: #111827;
+}
+
+.admin-sidebar__link-text {
+  flex: 1;
+  min-width: 0;
+  font-size: 0.9rem;
+  line-height: 1.2;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.admin-sidebar__empty {
+  border: 1px dashed var(--admin-border);
+  border-radius: 14px;
+  background: #fff;
+  padding: 16px;
+  color: var(--admin-text-soft);
+  font-size: 0.9rem;
+}
+
+.admin-sidebar__footer {
+  padding-top: 10px;
+  border-top: 1px solid #dedfe2;
+}
+
+.admin-sidebar__user {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: transparent;
+  border: 0;
+  border-radius: 9px;
+  padding: 6px 8px;
+}
+
+.admin-sidebar__avatar {
+  width: 32px;
+  height: 32px;
+  border-radius: 8px;
+  background: #dadcdf;
+  color: #303236;
+  font-weight: 800;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.admin-sidebar__user-meta {
+  flex: 1;
+  min-width: 0;
+}
+
+.admin-sidebar__user-name,
+.admin-sidebar__user-role {
+  margin: 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.admin-sidebar__user-name {
+  font-size: 0.82rem;
+  font-weight: 800;
+  color: #111827;
+}
+
+.admin-sidebar__user-role {
+  margin-top: 2px;
+  font-size: 0.68rem;
+  color: var(--admin-text-soft);
+}
+
+@media (max-width: 991.98px) {
+  .admin-sidebar {
+    display: none;
+  }
+}
+
+@media (max-width: 991.98px) {
+  .admin-sidebar {
+    display: flex;
+    position: fixed;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    width: 290px;
+    max-width: 88vw;
+    z-index: 120;
+    transform: translateX(-100%);
+    transition: transform 0.25s ease;
+    box-shadow: 0 20px 40px rgba(15, 23, 42, 0.18);
+  }
+
+  .admin-sidebar.admin-sidebar--open {
+    transform: translateX(0);
+  }
+}

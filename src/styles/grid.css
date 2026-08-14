@@ -1,0 +1,46 @@
+/* BREAKPOINTS */
+
+/*
+xs 0–575
+sm 576–767
+md 768–991
+lg 992–1199
+xl 1200–1439
+xxl 1440+
+*/
+
+.grid {
+  display: grid;
+  gap: var(--spacing-xl);
+}
+
+/* PRODUCT GRID */
+
+.product-grid {
+  display: grid;
+  gap: 20px;
+}
+
+@media (min-width: 1200px) {
+  .product-grid {
+    grid-template-columns: repeat(5, 1fr);
+  }
+}
+
+@media (max-width: 1199px) {
+  .product-grid {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+
+@media (max-width: 991px) {
+  .product-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+@media (max-width: 767px) {
+  .product-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}

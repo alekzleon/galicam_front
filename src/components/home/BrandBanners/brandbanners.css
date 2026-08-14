@@ -1,0 +1,140 @@
+.brand-banners {
+  position: relative;
+  z-index: 4;
+  margin-top: clamp(-58px, -4.5vw, -36px);
+  padding: 0 0 1.4rem;
+}
+
+.brand-banners__frame {
+  position: relative;
+  width: 100%;
+  min-height: 150px;
+  overflow: hidden;
+  border: 1px solid rgba(226, 232, 240, 0.88);
+  border-radius: 14px;
+  background: #ffffff;
+  box-shadow: 0 18px 36px rgba(15, 23, 42, 0.16);
+}
+
+.brand-banners__frame--loading {
+  background: linear-gradient(90deg, #eef2f7 0%, #f8fafc 45%, #eef2f7 100%);
+  background-size: 220% 100%;
+  animation: brand-banners-loading 1.2s ease infinite;
+}
+
+.brand-banners__link,
+.brand-banners__media {
+  display: block;
+  width: 100%;
+}
+
+.brand-banners__media {
+  line-height: 0;
+}
+
+.brand-banners__asset {
+  display: block;
+  width: 100%;
+  height: auto;
+  max-width: 100%;
+  object-fit: contain;
+  background: #ffffff;
+}
+
+.brand-banners__arrow {
+  position: absolute;
+  top: 50%;
+  z-index: 2;
+  display: grid;
+  place-items: center;
+  width: 40px;
+  height: 40px;
+  border: 1px solid rgba(255, 255, 255, 0.72);
+  border-radius: 999px;
+  background: rgba(15, 23, 42, 0.42);
+  color: #ffffff;
+  font-size: 2rem;
+  line-height: 1;
+  transform: translateY(-50%);
+  cursor: pointer;
+  transition: background 0.18s ease, transform 0.18s ease;
+}
+
+.brand-banners__arrow:hover {
+  background: rgba(15, 23, 42, 0.66);
+  transform: translateY(-50%) scale(1.04);
+}
+
+.brand-banners__arrow--prev {
+  left: 1rem;
+}
+
+.brand-banners__arrow--next {
+  right: 1rem;
+}
+
+.brand-banners__dots {
+  position: absolute;
+  right: 1rem;
+  bottom: 0.85rem;
+  z-index: 2;
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+}
+
+.brand-banners__dot {
+  width: 9px;
+  height: 9px;
+  border: 0;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.64);
+  cursor: pointer;
+  transition: background 0.18s ease, transform 0.18s ease, width 0.18s ease;
+}
+
+.brand-banners__dot.is-active {
+  width: 24px;
+  background: #ffffff;
+}
+
+@keyframes brand-banners-loading {
+  from {
+    background-position: 120% 0;
+  }
+
+  to {
+    background-position: -120% 0;
+  }
+}
+
+@media (max-width: 767.98px) {
+  .brand-banners {
+    margin-top: -28px;
+    padding: 0 0 1rem;
+  }
+
+  .brand-banners__frame {
+    min-height: 92px;
+    border-radius: 12px;
+  }
+
+  .brand-banners__arrow {
+    width: 34px;
+    height: 34px;
+    font-size: 1.55rem;
+  }
+
+  .brand-banners__arrow--prev {
+    left: 0.55rem;
+  }
+
+  .brand-banners__arrow--next {
+    right: 0.55rem;
+  }
+
+  .brand-banners__dots {
+    right: 0.7rem;
+    bottom: 0.6rem;
+  }
+}

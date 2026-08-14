@@ -1,0 +1,130 @@
+const adminMenuMap = [
+  {
+    module: "dashboard",
+    path: "/admin",
+    title: "Dashboard",
+    subtitle: "Resumen general del panel administrativo.",
+  },
+  {
+    module: "sales_channels",
+    path: "/admin/sales-channels",
+    title: "Canales de venta",
+    subtitle: "Analiza ventas, pedidos y productos por canal.",
+  },
+  {
+    module: "usuarios",
+    path: "/admin/users",
+    title: "Usuarios",
+    subtitle: "Gestiona los usuarios internos y su acceso.",
+  },
+  {
+    module: "roles",
+    path: "/admin/roles",
+    title: "Roles",
+    subtitle: "Administra roles y módulos permitidos.",
+  },
+  {
+    module: "productos",
+    path: "/admin/products",
+    title: "Productos",
+    subtitle: "Controla el catálogo y la información comercial.",
+  },
+  {
+    module: "carga_masiva_productos",
+    path: "/admin/products",
+    title: "Productos",
+    subtitle: "Importación masiva y mantenimiento del catálogo.",
+  },
+  {
+    module: "variantes",
+    path: "/admin/products",
+    title: "Productos",
+    subtitle: "Configuración de variantes y catálogo.",
+  },
+  {
+    module: "categorias",
+    path: "/admin/catalog/categories",
+    title: "Categorías",
+    subtitle: "Administra categorías del catálogo.",
+  },
+  {
+    module: "familias",
+    path: "/admin/catalog/families",
+    title: "Familias",
+    subtitle: "Administra familias del catálogo.",
+  },
+  {
+    module: "regiones",
+    path: "/admin/catalog/regions",
+    title: "Regiones",
+    subtitle: "Administra landings regionales y sus productos.",
+  },
+  {
+    module: "pedidos",
+    path: "/admin/orders",
+    title: "Pedidos",
+    subtitle: "Consulta y da seguimiento a los pedidos.",
+  },
+  {
+    module: "carritos",
+    path: "/admin/orders",
+    title: "Pedidos",
+    subtitle: "Consulta pedidos y carritos del ecommerce.",
+  },
+  {
+    module: "clientes",
+    path: "/admin/customers",
+    title: "Clientes",
+    subtitle: "Gestiona la información de clientes.",
+  },
+  {
+    module: "credito",
+    path: "/admin/credit",
+    title: "Crédito",
+    subtitle: "Gestiona validaciones y operación de crédito.",
+  },
+  {
+    module: "cobranza",
+    path: "/admin/collections",
+    title: "Cobranza",
+    subtitle: "Da seguimiento a cartera y cobranza.",
+  },
+  {
+    module: "promociones",
+    path: "/admin/promotions",
+    title: "Promociones",
+    subtitle: "Controla promociones, ofertas y banners.",
+  },
+  {
+    module: "banners",
+    path: "/admin/banners",
+    title: "Banners",
+    subtitle: "Administra banners y espacios destacados.",
+  },
+  {
+    module: "cupones",
+    path: "/admin/coupons",
+    title: "Cupones",
+    subtitle: "Gestiona códigos promocionales de marketing.",
+  },
+  {
+    module: "logs",
+    path: "/admin/logs",
+    title: "Logs",
+    subtitle: "Consulta los registros del sistema.",
+  },
+  {
+    module: "sincronizacion",
+    path: "/admin/sync",
+    title: "Sincronización",
+    subtitle: "Monitorea procesos de sincronización.",
+  },
+  {
+    module: "configuracion_ecommerce",
+    path: "/admin/settings",
+    title: "Configuración",
+    subtitle: "Ajustes generales del ecommerce.",
+  },
+]
+
+export default adminMenuMap

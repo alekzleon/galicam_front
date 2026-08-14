@@ -1,0 +1,111 @@
+.storefront-layout-skeleton {
+  min-height: 100vh;
+  background: #ffffff;
+  color: transparent;
+}
+
+.storefront-layout-skeleton__top,
+.storefront-layout-skeleton__nav,
+.storefront-layout-skeleton__hero,
+.storefront-layout-skeleton__grid span,
+.storefront-layout-skeleton__footer {
+  background:
+    linear-gradient(90deg, transparent 0%, rgba(255, 255, 255, 0.72) 48%, transparent 100%),
+    #eef1f5;
+  background-size: 240px 100%, 100% 100%;
+  background-position: -240px 0, 0 0;
+  animation: storefront-layout-skeleton 1.15s ease-in-out infinite;
+}
+
+.storefront-layout-skeleton__top {
+  height: 40px;
+}
+
+.storefront-layout-skeleton__nav {
+  height: 76px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: clamp(1rem, 4vw, 3rem);
+  border-bottom: 1px solid #e7eaf0;
+  background-color: #ffffff;
+  padding: 0 7vw;
+}
+
+.storefront-layout-skeleton__nav span {
+  width: clamp(64px, 8vw, 120px);
+  height: 14px;
+  border-radius: 999px;
+  background: #dde3eb;
+}
+
+.storefront-layout-skeleton__main {
+  display: grid;
+  gap: clamp(2rem, 5vw, 4rem);
+  padding-bottom: clamp(2rem, 5vw, 4rem);
+}
+
+.storefront-layout-skeleton__hero {
+  min-height: clamp(360px, 56vw, 680px);
+  display: grid;
+  align-items: center;
+  padding: 0 7vw;
+}
+
+.storefront-layout-skeleton__hero div {
+  width: min(420px, 70vw);
+  display: grid;
+  gap: 1rem;
+}
+
+.storefront-layout-skeleton__hero span {
+  height: 18px;
+  border-radius: 999px;
+  background: rgba(216, 222, 231, 0.9);
+}
+
+.storefront-layout-skeleton__hero span:nth-child(2) {
+  width: 74%;
+  height: 42px;
+}
+
+.storefront-layout-skeleton__hero span:nth-child(3) {
+  width: 48%;
+}
+
+.storefront-layout-skeleton__grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: clamp(1rem, 3vw, 2rem);
+  padding: 0 7vw;
+}
+
+.storefront-layout-skeleton__grid span {
+  min-height: 180px;
+  border-radius: 8px;
+}
+
+.storefront-layout-skeleton__footer {
+  height: 180px;
+  margin-top: auto;
+}
+
+@keyframes storefront-layout-skeleton {
+  to {
+    background-position: calc(100% + 240px) 0, 0 0;
+  }
+}
+
+@media (max-width: 760px) {
+  .storefront-layout-skeleton__nav {
+    justify-content: space-between;
+  }
+
+  .storefront-layout-skeleton__nav span:nth-child(n + 3) {
+    display: none;
+  }
+
+  .storefront-layout-skeleton__grid {
+    grid-template-columns: 1fr;
+  }
+}

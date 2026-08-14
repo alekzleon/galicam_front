@@ -1,0 +1,43 @@
+.inline-image-editor {
+  position: absolute;
+  right: 12px;
+  bottom: 12px;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  z-index: 2;
+}
+
+.inline-image-editor__input {
+  display: none;
+}
+
+.inline-image-editor__button {
+  width: 32px;
+  height: 32px;
+  border: 1px solid #dbe4ee;
+  border-radius: 8px;
+  background: #ffffff;
+  color: #13426b;
+  display: inline-grid;
+  place-items: center;
+  box-shadow: 0 8px 18px rgba(15, 23, 42, 0.16);
+  cursor: pointer;
+}
+
+.inline-image-editor__button--save {
+  border-color: #bbf7d0;
+  background: #f0fdf4;
+  color: #16a34a;
+}
+
+.inline-image-editor__button--cancel {
+  border-color: #fecaca;
+  background: #fff7f7;
+  color: #dc2626;
+}
+
+.inline-image-editor__button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}

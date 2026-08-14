@@ -1,0 +1,12 @@
+<IfModule mod_rewrite.c>
+  RewriteEngine On
+  RewriteBase /
+
+  # Si el archivo o carpeta SÍ existe (assets, imágenes, etc), se sirve normal
+  RewriteCond %{REQUEST_FILENAME} -f [OR]
+  RewriteCond %{REQUEST_FILENAME} -d
+  RewriteRule ^ - [L]
+
+  # Todo lo demás (rutas de React: /login, /cotizador, /quotes/12, etc) → index.html
+  RewriteRule . /index.html [L]
+</IfModule>

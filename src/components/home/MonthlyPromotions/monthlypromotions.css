@@ -1,0 +1,366 @@
+.monthly-promotions {
+  padding: 0 0 64px;
+}
+
+.monthly-promotions__header {
+  margin-bottom: 22px;
+}
+
+.monthly-promotions__title {
+  margin: 0 0 6px;
+  font-size: 28px;
+  line-height: 1.15;
+  font-weight: 700;
+  color: #111827;
+  letter-spacing: -0.02em;
+}
+
+.monthly-promotions__subtitle {
+  margin: 0;
+  font-size: 14px;
+  line-height: 1.6;
+  color: #6b7280;
+  max-width: 720px;
+}
+
+.monthly-promotions__grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 20px;
+}
+
+.promo-card {
+  min-height: 250px;
+  display: grid;
+  grid-template-columns: 44% 56%;
+  border-radius: 18px;
+  overflow: hidden;
+  box-shadow: var(--shadow-card);
+  border: 1px solid #eef0f3;
+  transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+}
+
+.promo-card:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-hover);
+  border-color: #dbe3ea;
+}
+
+.promo-card--loading {
+  min-height: 250px;
+  background: linear-gradient(90deg, #f1f5f9 0%, #e5eaf0 50%, #f1f5f9 100%);
+  background-size: 200% 100%;
+  animation: promo-card-pulse 1.2s ease-in-out infinite;
+}
+
+@keyframes promo-card-pulse {
+  0% {
+    background-position: 200% 0;
+  }
+
+  100% {
+    background-position: -200% 0;
+  }
+}
+
+.promo-card--violet {
+  background: linear-gradient(135deg, #6d4df2 0%, #8a2bc3 100%);
+}
+
+.promo-card--light {
+  background: #f2f4f7;
+}
+
+.promo-card__media {
+  position: relative;
+  min-height: 250px;
+  background: rgba(255, 255, 255, 0.08);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 18px;
+}
+
+.promo-card__image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 12px;
+  display: block;
+  transition: transform 0.25s ease;
+}
+
+.promo-card:hover .promo-card__image {
+  transform: scale(1.03);
+}
+
+.promo-card__content {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 28px 28px 28px 26px;
+}
+
+.promo-card__eyebrow {
+  display: inline-block;
+  margin-bottom: 10px;
+  font-size: 12px;
+  line-height: 1.2;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.promo-card__title {
+  margin: 0 0 12px;
+  font-size: 22px;
+  line-height: 1.2;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+}
+
+.promo-card__description {
+  margin: 0 0 20px;
+  font-size: 14px;
+  line-height: 1.6;
+  max-width: 420px;
+}
+
+.promo-card__button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: fit-content;
+  min-width: 138px;
+  height: 42px;
+  padding: 0 18px;
+  border-radius: 10px;
+  font-size: 14px;
+  font-weight: 700;
+  text-decoration: none;
+  transition: transform 0.2s ease, box-shadow 0.2s ease, opacity 0.2s ease;
+}
+
+.promo-card__button:hover {
+  transform: translateY(-1px);
+  box-shadow: var(--shadow-soft);
+}
+
+/* Variante oscura/violeta */
+.promo-card--violet .promo-card__eyebrow,
+.promo-card--violet .promo-card__title,
+.promo-card--violet .promo-card__description {
+  color: #ffffff;
+}
+
+.promo-card--violet .promo-card__description {
+  color: rgba(255, 255, 255, 0.9);
+}
+
+.promo-card--violet .promo-card__button {
+  background: #ffffff;
+  color: #5d39dc;
+}
+
+/* Variante clara */
+.promo-card--light .promo-card__eyebrow {
+  color: #6b7280;
+}
+
+.promo-card--light .promo-card__title {
+  color: #202124;
+}
+
+.promo-card--light .promo-card__description {
+  color: #4b5563;
+}
+
+.promo-card--light .promo-card__button {
+  background: #13426b;
+  color: #ffffff;
+}
+
+/* XL */
+@media (max-width: 1199px) {
+  .monthly-promotions__grid {
+    gap: 18px;
+  }
+
+  .promo-card {
+    grid-template-columns: 42% 58%;
+    border-radius: 16px;
+  }
+
+  .promo-card__content {
+    padding: 24px 24px 24px 22px;
+  }
+
+  .promo-card__title {
+    font-size: 20px;
+  }
+}
+
+/* LG */
+@media (max-width: 991px) {
+  .monthly-promotions {
+    padding: 0 0 52px;
+  }
+
+  .monthly-promotions__header {
+    margin-bottom: 18px;
+  }
+
+  .monthly-promotions__title {
+    font-size: 24px;
+  }
+
+  .monthly-promotions__grid {
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+
+  .promo-card {
+    min-height: 220px;
+    grid-template-columns: 40% 60%;
+  }
+
+  .promo-card__media {
+    min-height: 220px;
+    padding: 16px;
+  }
+
+  .promo-card__content {
+    padding: 22px 22px 22px 20px;
+  }
+
+  .promo-card__title {
+    font-size: 20px;
+  }
+
+  .promo-card__description {
+    margin-bottom: 18px;
+  }
+}
+
+/* MD */
+@media (max-width: 767px) {
+  .monthly-promotions {
+    padding: 0 0 42px;
+  }
+
+  .monthly-promotions__title {
+    font-size: 21px;
+  }
+
+  .monthly-promotions__subtitle {
+    font-size: 13px;
+  }
+
+  .promo-card {
+    grid-template-columns: 1fr;
+    min-height: auto;
+    border-radius: 14px;
+  }
+
+  .promo-card__media {
+    min-height: 220px;
+    padding: 14px;
+  }
+
+  .promo-card__image {
+    border-radius: 10px;
+  }
+
+  .promo-card__content {
+    padding: 18px 16px 18px;
+  }
+
+  .promo-card__eyebrow {
+    margin-bottom: 8px;
+    font-size: 11px;
+  }
+
+  .promo-card__title {
+    margin-bottom: 10px;
+    font-size: 18px;
+    line-height: 1.25;
+  }
+
+  .promo-card__description {
+    margin-bottom: 16px;
+    font-size: 13px;
+    line-height: 1.55;
+    max-width: 100%;
+  }
+
+  .promo-card__button {
+    min-width: 132px;
+    height: 40px;
+    padding: 0 16px;
+    font-size: 13px;
+  }
+}
+
+/* SM */
+@media (max-width: 575px) {
+  .monthly-promotions {
+    padding: 0 0 34px;
+  }
+
+  .monthly-promotions__header {
+    margin-bottom: 14px;
+  }
+
+  .monthly-promotions__title {
+    font-size: 18px;
+  }
+
+  .monthly-promotions__subtitle {
+    font-size: 12px;
+    line-height: 1.5;
+  }
+
+  .monthly-promotions__grid {
+    gap: 12px;
+  }
+
+  .promo-card {
+    border-radius: 12px;
+  }
+
+  .promo-card__media {
+    min-height: 180px;
+    padding: 12px;
+  }
+
+  .promo-card__image {
+    border-radius: 8px;
+  }
+
+  .promo-card__content {
+    padding: 14px 12px 14px;
+  }
+
+  .promo-card__eyebrow {
+    font-size: 10px;
+    margin-bottom: 6px;
+  }
+
+  .promo-card__title {
+    font-size: 16px;
+    margin-bottom: 8px;
+  }
+
+  .promo-card__description {
+    font-size: 12px;
+    margin-bottom: 14px;
+  }
+
+  .promo-card__button {
+    width: 100%;
+    min-width: 100%;
+    height: 38px;
+    border-radius: 8px;
+    font-size: 13px;
+  }
+}

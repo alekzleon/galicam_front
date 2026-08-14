@@ -1,0 +1,342 @@
+.cart_excel_page {
+  background: #f5f6f8;
+  min-height: 100vh;
+  padding: 24px 0 96px;
+}
+
+.cart_excel_shell {
+  width: min(100%, 1380px);
+  margin: 0 auto;
+  padding: 0 20px;
+}
+
+.cart_excel_header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 18px;
+  margin-bottom: 18px;
+}
+
+.cart_excel_eyebrow {
+  margin: 0 0 8px;
+  color: #0f766e;
+  font-size: 12px;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.cart_excel_title {
+  margin: 0;
+  color: #111827;
+  font-size: 30px;
+  font-weight: 800;
+  line-height: 1.1;
+}
+
+.cart_excel_subtitle {
+  margin: 8px 0 0;
+  max-width: 760px;
+  color: #6b7280;
+  font-size: 14px;
+  line-height: 1.6;
+}
+
+.cart_excel_layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 360px;
+  gap: 18px;
+  align-items: start;
+}
+
+.cart_excel_main,
+.cart_excel_sidebar {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+.cart_excel_card,
+.cart_excel_empty {
+  background: #ffffff;
+  border: 1px solid #e8ebef;
+  border-radius: 18px;
+  padding: 22px;
+  box-shadow: 0 10px 30px rgba(15, 23, 42, 0.04);
+}
+
+.cart_excel_empty {
+  text-align: center;
+}
+
+.cart_excel_empty h1 {
+  margin: 0 0 8px;
+  color: #111827;
+  font-size: 26px;
+}
+
+.cart_excel_empty p {
+  margin: 0;
+  color: #6b7280;
+}
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 40px;
+  padding: 0 16px;
+  border-radius: 10px;
+  border: 1px solid transparent;
+  text-decoration: none;
+  font-size: 13px;
+  font-weight: 800;
+  line-height: 1.2;
+  cursor: pointer;
+  transition: 0.2s ease;
+}
+
+.btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.btn_primary {
+  background: #111827;
+  color: #ffffff;
+}
+
+.btn_primary:hover:not(:disabled) {
+  background: #0b1220;
+}
+
+.btn_secondary {
+  background: #ffffff;
+  border-color: #d9dee5;
+  color: #111827;
+}
+
+.btn_secondary:hover:not(:disabled) {
+  background: #f9fafb;
+}
+
+.btn_ghost {
+  background: #f9fafb;
+  border-color: #eceff3;
+  color: #111827;
+}
+
+.btn_ghost:hover:not(:disabled) {
+  background: #f3f4f6;
+}
+
+.cart_excel_card_head {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 16px;
+  margin-bottom: 18px;
+}
+
+.cart_excel_card h2 {
+  margin: 0;
+  color: #111827;
+  font-size: 18px;
+  font-weight: 800;
+}
+
+.cart_excel_card h3 {
+  margin: 0 0 10px;
+  color: #111827;
+  font-size: 15px;
+  font-weight: 800;
+}
+
+.cart_excel_card p {
+  margin: 8px 0 0;
+  color: #6b7280;
+  font-size: 13px;
+  line-height: 1.55;
+}
+
+.cart_excel_steps {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+}
+
+.cart_excel_step,
+.cart_excel_summary_item {
+  border: 1px solid #e5e7eb;
+  border-radius: 14px;
+  background: #f8fafc;
+  padding: 14px;
+}
+
+.cart_excel_step span,
+.cart_excel_summary_item span {
+  display: block;
+  margin-bottom: 6px;
+  color: #64748b;
+  font-size: 11px;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.cart_excel_step strong,
+.cart_excel_summary_item strong {
+  display: block;
+  color: #111827;
+  font-size: 16px;
+  font-weight: 800;
+  line-height: 1.35;
+}
+
+.cart_excel_step small {
+  display: block;
+  margin-top: 6px;
+  color: #6b7280;
+  font-size: 12px;
+  line-height: 1.5;
+}
+
+.cart_excel_dropzone {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  min-height: 220px;
+  border: 2px dashed #cbd5e1;
+  border-radius: 18px;
+  background: #fbfdff;
+  text-align: center;
+  padding: 26px;
+  cursor: pointer;
+  transition: border-color 0.2s ease, background 0.2s ease;
+}
+
+.cart_excel_dropzone:hover {
+  border-color: #0f766e;
+  background: #f8fffd;
+}
+
+.cart_excel_dropzone input {
+  display: none;
+}
+
+.cart_excel_dropzone i {
+  font-size: 44px;
+  color: #15803d;
+}
+
+.cart_excel_dropzone strong {
+  color: #111827;
+  font-size: 16px;
+  font-weight: 800;
+  line-height: 1.35;
+}
+
+.cart_excel_dropzone span {
+  color: #6b7280;
+  font-size: 12px;
+  line-height: 1.55;
+}
+
+.cart_excel_form_actions,
+.cart_excel_result_footer {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 16px;
+}
+
+.cart_excel_notes {
+  margin: 14px 0 0;
+  padding-left: 18px;
+  color: #4b5563;
+  font-size: 13px;
+  line-height: 1.65;
+}
+
+.cart_excel_summary_grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+  margin-top: 14px;
+}
+
+.cart_excel_result_block {
+  margin-top: 18px;
+}
+
+.cart_excel_result_list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.cart_excel_result_item {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 12px 14px;
+  border-radius: 14px;
+  border: 1px solid #e5e7eb;
+  background: #ffffff;
+}
+
+.cart_excel_result_item.is-success {
+  border-color: #bbf7d0;
+  background: #f0fdf4;
+}
+
+.cart_excel_result_item.is-error {
+  border-color: #fecaca;
+  background: #fff7f7;
+}
+
+.cart_excel_result_item strong {
+  color: #111827;
+  font-size: 13px;
+  font-weight: 800;
+}
+
+.cart_excel_result_item span,
+.cart_excel_result_item small {
+  color: #4b5563;
+  font-size: 12px;
+  line-height: 1.45;
+}
+
+@media (max-width: 991px) {
+  .cart_excel_layout {
+    grid-template-columns: 1fr;
+  }
+
+  .cart_excel_header,
+  .cart_excel_card_head {
+    flex-direction: column;
+  }
+}
+
+@media (max-width: 640px) {
+  .cart_excel_page {
+    padding-top: 18px;
+  }
+
+  .cart_excel_title {
+    font-size: 24px;
+  }
+
+  .cart_excel_steps,
+  .cart_excel_summary_grid {
+    grid-template-columns: 1fr;
+  }
+
+  .cart_excel_shell {
+    padding: 0 14px;
+  }
+}

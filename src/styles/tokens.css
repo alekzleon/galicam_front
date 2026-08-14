@@ -1,0 +1,85 @@
+:root {
+
+  /* ========================
+     COLORS
+  ======================== */
+
+  --color-primary: #2563EB;
+  --color-secondary: #1D4ED8;
+  --color-accent: #38BDF8;
+
+  --color-success: #16A34A;
+  --color-danger: #DC2626;
+  --color-warning: #F59E0B;
+
+  --color-background: #F5F5F5;
+  --color-surface: #FFFFFF;
+  --color-card: #FFFFFF;
+
+  --color-border: #E5E7EB;
+  --color-border-soft: #EEF0F3;
+
+  --color-text-primary: #111827;
+  --color-text-secondary: #4B5563;
+  --color-text-muted: #6B7280;
+  --color-text-inverse: #FFFFFF;
+
+  --color-price: #111827;
+  --color-offer: #16A34A;
+  --color-discount: #DC2626;
+
+  /* ========================
+     RADIUS
+  ======================== */
+
+  --radius-xs: 4px;
+  --radius-sm: 6px;
+  --radius-md: 8px;
+  --radius-lg: 12px;
+  --radius-xl: 16px;
+
+  /* ========================
+     SHADOWS
+  ======================== */
+
+  --shadow-soft: 0 1px 2px rgba(16,24,40,0.04),
+                  0 2px 8px rgba(16,24,40,0.04);
+
+  --shadow-card: 0 1px 3px rgba(16,24,40,0.05),
+                 0 4px 12px rgba(16,24,40,0.04);
+
+  --shadow-hover: 0 4px 16px rgba(16,24,40,0.08);
+
+  /* ========================
+     SPACING
+  ======================== */
+
+  --spacing-2xs: 4px;
+  --spacing-xs: 8px;
+  --spacing-sm: 12px;
+  --spacing-md: 16px;
+  --spacing-lg: 20px;
+  --spacing-xl: 24px;
+  --spacing-2xl: 32px;
+  --spacing-3xl: 40px;
+  --spacing-4xl: 48px;
+  --spacing-5xl: 64px;
+
+  /* ========================
+     HEIGHTS
+  ======================== */
+
+  --height-input: 44px;
+  --height-button: 44px;
+  --height-search: 48px;
+
+  /* ========================
+     Z-INDEX
+  ======================== */
+
+  --z-header: 100;
+  --z-dropdown: 200;
+  --z-overlay: 300;
+  --z-modal: 400;
+
+}

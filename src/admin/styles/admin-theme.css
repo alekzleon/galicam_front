@@ -1,0 +1,65 @@
+:root {
+  --admin-bg: #eef0f3;
+  --admin-surface: #ffffff;
+  --admin-surface-soft: #f8f9fb;
+  --admin-border: #e6e8ee;
+  --admin-border-soft: #eff2f6;
+
+  --admin-text: #171717;
+  --admin-text-soft: #6f7682;
+  --admin-text-muted: #9aa3af;
+
+  --admin-primary: #4f6df5;
+  --admin-primary-soft: #eef2ff;
+  --admin-cyan: #19b7b4;
+  --admin-orange: #ff8a5b;
+  --admin-red: #ff6b6b;
+  --admin-green: #22c55e;
+  --admin-purple: #7c6ff6;
+
+  --admin-shadow: 0 12px 30px rgba(16, 24, 40, 0.06);
+
+  --admin-radius-xl: 24px;
+  --admin-radius-lg: 18px;
+  --admin-radius-md: 14px;
+  --admin-radius-sm: 10px;
+
+  --admin-sidebar-width: 260px;
+  --admin-header-height: 78px;
+
+  --font-admin: "Inter", sans-serif;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body,
+#root {
+  min-height: 100%;
+}
+
+body {
+  margin: 0;
+  font-family: var(--font-admin);
+  background: var(--admin-bg);
+  color: var(--admin-text);
+}
+
+a {
+  text-decoration: none;
+  color: inherit;
+}
+
+button,
+input,
+select,
+textarea {
+  font: inherit;
+}
+
+img {
+  display: block;
+  max-width: 100%;
+}

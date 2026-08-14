@@ -1,0 +1,364 @@
+.contact-page {
+  padding: 34px 0 64px;
+  background: #f5f5f5;
+}
+
+.contact-page__hero {
+  margin-bottom: 26px;
+}
+
+.contact-page__header {
+  max-width: 760px;
+}
+
+.contact-page__breadcrumbs {
+  margin: 0 0 8px;
+  font-size: 13px;
+  color: #6b7280;
+}
+
+.contact-page__header h1 {
+  margin: 0 0 10px;
+  color: #111827;
+  font-size: 34px;
+  line-height: 1.15;
+  font-weight: 800;
+}
+
+.contact-page__header p:last-child {
+  margin: 0;
+  color: #4b5563;
+  font-size: 16px;
+  line-height: 1.65;
+}
+
+.contact-page__grid,
+.contact-faq-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(360px, 1fr);
+  gap: 30px;
+  align-items: start;
+}
+
+.contact-page__grid {
+  margin-bottom: 38px;
+}
+
+.contact-form,
+.contact-map,
+.contact-faq,
+.contact-photo {
+  background: #ffffff;
+  border: 1px solid #e5edf4;
+  border-radius: 8px;
+  box-shadow: 0 12px 28px rgba(17, 24, 39, 0.06);
+}
+
+.contact-form,
+.contact-map,
+.contact-faq {
+  padding: 24px;
+}
+
+.contact-section-title {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 22px;
+}
+
+.contact-section-title span {
+  width: 4px;
+  height: 26px;
+  border-radius: 999px;
+  background: #13426b;
+}
+
+.contact-section-title h2 {
+  margin: 0;
+  color: #424956;
+  font-size: 20px;
+  line-height: 1.25;
+  font-weight: 800;
+  text-transform: uppercase;
+}
+
+.contact-section-title--soft h2 {
+  text-transform: none;
+}
+
+.contact-form {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+.contact-form__field {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin: 0;
+}
+
+.contact-form__field span {
+  color: #222;
+  font-size: 14px;
+  font-weight: 700;
+}
+
+.contact-form__field input,
+.contact-form__field textarea {
+  width: 100%;
+  border: 1px solid #d7dde5;
+  border-radius: 4px;
+  background: #ffffff;
+  color: #111827;
+  font: inherit;
+  padding: 11px 12px;
+  outline: none;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.contact-form__field input {
+  height: 40px;
+}
+
+.contact-form__field textarea {
+  min-height: 138px;
+  resize: vertical;
+}
+
+.contact-form__field input:focus,
+.contact-form__field textarea:focus {
+  border-color: #13426b;
+  box-shadow: 0 0 0 3px rgba(19, 66, 107, 0.12);
+}
+
+.contact-form__submit {
+  align-self: flex-start;
+  min-width: 110px;
+  height: 44px;
+  border: 0;
+  border-radius: 4px;
+  background: #083c7c;
+  color: #ffffff;
+  padding: 0 24px;
+  font-size: 14px;
+  font-weight: 800;
+  letter-spacing: 0;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: background 0.2s ease, transform 0.2s ease;
+}
+
+.contact-form__submit:hover {
+  background: #13426b;
+  transform: translateY(-1px);
+}
+
+.contact-form__submit:disabled {
+  cursor: wait;
+  opacity: 0.72;
+  transform: none;
+}
+
+.contact-form__status {
+  margin: 0;
+  border-radius: 6px;
+  padding: 12px 14px;
+  font-size: 14px;
+  line-height: 1.45;
+  font-weight: 700;
+}
+
+.contact-form__status--success {
+  border: 1px solid #b7dfca;
+  background: #ecfdf3;
+  color: #126b3c;
+}
+
+.contact-form__status--error {
+  border: 1px solid #f3c0c0;
+  background: #fff1f1;
+  color: #b42318;
+}
+
+.contact-map iframe {
+  display: block;
+  width: 100%;
+  min-height: 420px;
+  border: 0;
+  border-radius: 6px;
+}
+
+.contact-map__skeleton,
+.contact-photo__skeleton {
+  width: 100%;
+  min-height: 420px;
+  border-radius: 6px;
+  background: linear-gradient(90deg, #eef2f7 0%, #f8fafc 45%, #eef2f7 100%);
+  background-size: 220% 100%;
+  animation: contact-loading 1.15s ease infinite;
+}
+
+.contact-map__editor {
+  display: block;
+  min-width: 0;
+  margin-top: 12px;
+  color: #4b5563;
+  font-size: 14px;
+}
+
+.contact-map__editor .inline-setting-editor {
+  width: 100%;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  justify-content: stretch;
+}
+
+.contact-map__editor .inline-setting-editor__input {
+  width: min(100%, 520px);
+}
+
+.contact-map__editor .inline-setting-editor__text {
+  display: block;
+  width: 100%;
+}
+
+.contact-faq__intro {
+  margin: -6px 0 18px;
+  color: #4b5563;
+  font-size: 15px;
+  line-height: 1.6;
+}
+
+.contact-faq__accordion {
+  border-top: 1px solid #e5edf4;
+}
+
+.contact-faq__item {
+  border-bottom: 1px solid #e5edf4;
+}
+
+.contact-faq__trigger {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+  border: 0;
+  background: transparent;
+  padding: 16px 0;
+  color: #1f2937;
+  font-size: 15px;
+  font-weight: 700;
+  line-height: 1.35;
+  text-align: left;
+  cursor: pointer;
+}
+
+.contact-faq__icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  min-width: 28px;
+  border-radius: 50%;
+  background: #eef6fb;
+  color: #13426b;
+  font-size: 18px;
+  transition: transform 0.2s ease;
+}
+
+.contact-faq__trigger.is-open .contact-faq__icon {
+  transform: rotate(180deg);
+}
+
+.contact-faq__answer {
+  padding: 0 0 18px 40px;
+  color: #4b5563;
+  font-size: 15px;
+  line-height: 1.65;
+}
+
+.contact-faq__answer p {
+  margin: 0;
+}
+
+.contact-faq__answer a {
+  color: #13426b;
+  font-weight: 700;
+}
+
+.contact-photo {
+  position: relative;
+  margin: 0;
+  overflow: hidden;
+  min-height: 420px;
+}
+
+.contact-photo img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  min-height: 420px;
+  object-fit: cover;
+}
+
+@keyframes contact-loading {
+  from {
+    background-position: 120% 0;
+  }
+
+  to {
+    background-position: -120% 0;
+  }
+}
+
+@media (max-width: 991px) {
+  .contact-page__grid,
+  .contact-faq-layout {
+    grid-template-columns: 1fr;
+  }
+
+  .contact-map iframe,
+  .contact-map__skeleton,
+  .contact-photo,
+  .contact-photo img,
+  .contact-photo__skeleton {
+    min-height: 340px;
+  }
+}
+
+@media (max-width: 767px) {
+  .contact-page {
+    padding: 24px 0 48px;
+  }
+
+  .contact-page__header h1 {
+    font-size: 28px;
+  }
+
+  .contact-form,
+  .contact-map,
+  .contact-faq {
+    padding: 18px;
+  }
+
+  .contact-section-title h2 {
+    font-size: 18px;
+  }
+
+  .contact-map iframe {
+    min-height: 320px;
+  }
+
+  .contact-map__skeleton,
+  .contact-photo__skeleton {
+    min-height: 320px;
+  }
+
+  .contact-faq__answer {
+    padding-left: 0;
+  }
+}

@@ -1,0 +1,122 @@
+body {
+  font-family: "Inter", system-ui, sans-serif;
+  color: var(--color-text-primary);
+}
+
+/* TITLES */
+
+h1 {
+  font-size: 40px;
+  line-height: 48px;
+  font-weight: 700;
+}
+
+h2 {
+  font-size: 32px;
+  line-height: 40px;
+  font-weight: 700;
+}
+
+h3 {
+  font-size: 24px;
+  line-height: 32px;
+  font-weight: 600;
+}
+
+h4 {
+  font-size: 20px;
+  line-height: 28px;
+  font-weight: 600;
+}
+
+/* SECTION TITLES */
+
+.section-title {
+  font-size: 28px;
+  line-height: 36px;
+  font-weight: 700;
+}
+
+.section-subtitle {
+  font-size: 16px;
+  line-height: 24px;
+}
+
+/* BODY */
+
+.body-lg {
+  font-size: 16px;
+  line-height: 24px;
+}
+
+.body-md {
+  font-size: 14px;
+  line-height: 22px;
+}
+
+.body-sm {
+  font-size: 13px;
+  line-height: 20px;
+}
+
+.caption {
+  font-size: 12px;
+  line-height: 18px;
+}
+
+/* PRODUCT */
+
+.product-title-card {
+  font-size: 14px;
+  line-height: 20px;
+  font-weight: 500;
+}
+
+.product-title-detail {
+  font-size: 24px;
+  line-height: 32px;
+  font-weight: 600;
+}
+
+/* PRICE */
+
+.price-main-card {
+  font-size: 24px;
+  font-weight: 700;
+}
+
+.price-main-detail {
+  font-size: 36px;
+  font-weight: 700;
+}
+
+.price-old {
+  font-size: 14px;
+  text-decoration: line-through;
+}
+
+.price-discount {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--color-discount);
+}
+
+/* BADGES */
+
+.badge-text {
+  font-size: 11px;
+  font-weight: 600;
+}
+
+/* BUTTON */
+
+.button-text {
+  font-size: 14px;
+  font-weight: 600;
+}
+
+/* INPUT */
+
+.input-text {
+  font-size: 14px;
+}

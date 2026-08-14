@@ -1,0 +1,33 @@
+.container-fluid {
+  width: 100%;
+}
+
+.container-main {
+  max-width: 1320px;
+  margin: 0 auto;
+  padding-left: 32px;
+  padding-right: 32px;
+}
+
+.container-narrow {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding-left: 32px;
+  padding-right: 32px;
+}
+
+@media (max-width: 991px) {
+  .container-main,
+  .container-narrow {
+    padding-left: 20px;
+    padding-right: 20px;
+  }
+}
+
+@media (max-width: 575px) {
+  .container-main,
+  .container-narrow {
+    padding-left: 16px;
+    padding-right: 16px;
+  }
+}

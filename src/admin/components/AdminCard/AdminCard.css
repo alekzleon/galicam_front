@@ -1,0 +1,35 @@
+.admin-card-box {
+  background: #fff;
+  border: 1px solid var(--admin-border);
+  border-radius: 18px;
+  box-shadow: 0 8px 20px rgba(16, 24, 40, 0.03);
+}
+
+.admin-card-box__header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 14px;
+  padding: 18px 18px 0;
+}
+
+.admin-card-box__title {
+  margin: 0;
+  font-size: 1rem;
+  font-weight: 800;
+  color: #111827;
+}
+
+.admin-card-box__subtitle {
+  margin: 6px 0 0;
+  font-size: 0.84rem;
+  color: var(--admin-text-soft);
+}
+
+.admin-card-box__right {
+  flex-shrink: 0;
+}
+
+.admin-card-box__body {
+  padding: 18px;
+}

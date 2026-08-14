@@ -1,0 +1,255 @@
+.artisan-selection {
+  padding: 0 0 64px;
+}
+
+.artisan-selection__shell {
+  border-top: 1px solid #d8d8d8;
+  padding: 44px 40px 0;
+  background: #ffffff;
+}
+
+.artisan-selection__header {
+  display: grid;
+  justify-items: center;
+  gap: 8px;
+  margin-bottom: 44px;
+  text-align: center;
+}
+
+.artisan-selection__header h2 {
+  margin: 0;
+  color: #161616;
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: 31px;
+  font-weight: 400;
+  line-height: 1.2;
+  letter-spacing: 0;
+}
+
+.artisan-selection__header a {
+  color: #1f2528;
+  font-size: 14px;
+  line-height: 1.3;
+  text-decoration: underline;
+}
+
+.artisan-selection__carousel {
+  position: relative;
+}
+
+.artisan-selection__grid {
+  display: grid;
+  gap: 18px;
+}
+
+.artisan-product {
+  position: relative;
+  min-width: 0;
+}
+
+.artisan-product__image {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  aspect-ratio: 1 / 0.86;
+  width: 100%;
+  margin-bottom: 12px;
+  overflow: hidden;
+  background: #f3f3f3;
+  text-decoration: none;
+}
+
+.artisan-product__image img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  padding: 12px;
+  transition: transform 0.25s ease;
+}
+
+.artisan-product:hover .artisan-product__image img {
+  transform: scale(1.03);
+}
+
+.artisan-product__favorite {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  z-index: 2;
+  width: 34px;
+  height: 34px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: 0;
+  border-radius: 999px;
+  background: #ffffff;
+  color: #111111;
+  box-shadow: 0 2px 8px rgba(15, 23, 42, 0.08);
+  cursor: pointer;
+}
+
+.artisan-product__favorite.is-active {
+  color: #dc2626;
+}
+
+.artisan-product__favorite:disabled {
+  opacity: 0.65;
+  cursor: not-allowed;
+}
+
+.artisan-product__name {
+  display: -webkit-box;
+  min-height: 42px;
+  color: #333333;
+  font-size: 14px;
+  line-height: 1.45;
+  text-decoration: none;
+  overflow: hidden;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+}
+
+.artisan-product__price {
+  display: block;
+  margin-top: 6px;
+  color: #111111;
+  font-size: 14px;
+  line-height: 1.2;
+}
+
+.artisan-product__price-note {
+  display: block;
+  min-height: 34px;
+  margin-top: 6px;
+  color: #4b5563;
+  font-size: 13px;
+  font-weight: 600;
+  line-height: 1.3;
+}
+
+.artisan-selection__arrow {
+  position: absolute;
+  top: 34%;
+  z-index: 3;
+  width: 32px;
+  height: 44px;
+  border: 0;
+  background: transparent;
+  color: #050505;
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: 54px;
+  line-height: 0.8;
+  cursor: pointer;
+}
+
+.artisan-selection__arrow:disabled {
+  opacity: 0.22;
+  cursor: not-allowed;
+}
+
+.artisan-selection__arrow--prev {
+  left: -34px;
+}
+
+.artisan-selection__arrow--next {
+  right: -34px;
+}
+
+.artisan-product--loading {
+  pointer-events: none;
+}
+
+.artisan-product--loading .artisan-product__image,
+.artisan-product__line {
+  background: linear-gradient(90deg, #f1f1f1 0%, #e7e7e7 50%, #f1f1f1 100%);
+  background-size: 200% 100%;
+  animation: artisan-product-pulse 1.2s ease-in-out infinite;
+}
+
+.artisan-product__line {
+  display: block;
+  height: 15px;
+  margin-top: 10px;
+  border-radius: 999px;
+}
+
+.artisan-product__line--short {
+  width: 55%;
+}
+
+.artisan-selection__empty {
+  padding: 18px;
+  color: #6b7280;
+  text-align: center;
+}
+
+@keyframes artisan-product-pulse {
+  0% {
+    background-position: 200% 0;
+  }
+
+  100% {
+    background-position: -200% 0;
+  }
+}
+
+@media (max-width: 991px) {
+  .artisan-selection__shell {
+    padding: 36px 24px 0;
+  }
+
+  .artisan-selection__arrow--prev {
+    left: -24px;
+  }
+
+  .artisan-selection__arrow--next {
+    right: -24px;
+  }
+}
+
+@media (max-width: 767px) {
+  .artisan-selection {
+    padding-bottom: 44px;
+  }
+
+  .artisan-selection__shell {
+    padding: 30px 0 0;
+  }
+
+  .artisan-selection__header {
+    margin-bottom: 26px;
+  }
+
+  .artisan-selection__header h2 {
+    font-size: 25px;
+  }
+
+  .artisan-selection__arrow {
+    top: 30%;
+    width: 26px;
+    font-size: 42px;
+  }
+
+  .artisan-selection__arrow--prev {
+    left: -18px;
+  }
+
+  .artisan-selection__arrow--next {
+    right: -18px;
+  }
+}
+
+@media (max-width: 575px) {
+  .artisan-selection__shell {
+    padding-top: 26px;
+  }
+
+  .artisan-selection__arrow {
+    display: none;
+  }
+
+  .artisan-selection__grid {
+    gap: 10px;
+  }
+}

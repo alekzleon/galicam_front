@@ -1,0 +1,63 @@
+.loading-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  background: rgba(17, 24, 39, 0.42);
+  backdrop-filter: blur(3px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: all;
+}
+
+.loading-overlay-box {
+  min-width: 260px;
+  max-width: 320px;
+  background: #ffffff;
+  border: 1px solid #e5e7eb;
+  border-radius: 18px;
+  padding: 24px 22px;
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.14);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 14px;
+}
+
+.loading-overlay-logo {
+  width: 150px;
+  max-width: 100%;
+  transform-origin: center;
+  animation: brandLogoPulse 1.15s ease-in-out infinite;
+}
+
+.loading-overlay-brand {
+  color: #111827;
+  font-size: 1.1rem;
+  text-align: center;
+  transform-origin: center;
+  animation: brandLogoPulse 1.15s ease-in-out infinite;
+}
+
+.loading-overlay-text {
+  margin: 0;
+  font-size: 14px;
+  font-weight: 600;
+  color: #111827;
+  text-align: center;
+}
+
+@keyframes brandLogoPulse {
+  0% {
+    transform: scale(0.8);
+    opacity: 0.9;
+  }
+  50% {
+    transform: scale(1.4);
+    opacity: 1;
+  }
+  100% {
+    transform: scale(0.8);
+    opacity: 0.9;
+  }
+}

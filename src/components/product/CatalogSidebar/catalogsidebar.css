@@ -1,0 +1,123 @@
+.catalog-sidebar {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.catalog-sidebar__section {
+  background: transparent;
+}
+
+.catalog-sidebar__section-title {
+  margin: 0 0 14px;
+  font-size: 24px;
+  line-height: 1.2;
+  font-weight: 300;
+  color: #6b7280;
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+}
+
+.catalog-sidebar__categories {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+.catalog-category {
+  border-bottom: 1px solid #d9dde2;
+  padding: 0;
+}
+
+.catalog-category__trigger {
+  width: 100%;
+  border: none;
+  background: transparent;
+  padding: 12px 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  cursor: pointer;
+  text-align: left;
+}
+
+.catalog-category__name {
+  font-size: 14px;
+  line-height: 1.5;
+  color: #3a516b;
+  font-weight: 500;
+}
+
+.catalog-category__meta {
+  font-size: 12px;
+  color: #9ca3af;
+  white-space: nowrap;
+}
+
+.catalog-category__families {
+  margin: 0 0 12px;
+  padding: 2px 0 8px 14px;
+  border-left: 1px solid #cfd6dd;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.catalog-family {
+  border: none;
+  background: transparent;
+  padding: 0;
+  text-align: left;
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 10px;
+  cursor: pointer;
+  color: #3a516b;
+  font-size: 13px;
+  line-height: 1.4;
+}
+
+.catalog-family small {
+  color: #a3a8b1;
+  font-size: 11px;
+}
+
+.catalog-sidebar__filter-card {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.catalog-filter-chip {
+  min-height: 42px;
+  padding: 0 14px;
+  border: 1px solid #d9dde2;
+  border-radius: 10px;
+  background: #ffffff;
+  text-align: left;
+  color: #4b5563;
+  font-size: 14px;
+  cursor: pointer;
+  box-shadow: var(--shadow-soft);
+}
+
+.catalog-sidebar__brands {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.catalog-brand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  color: #4b5563;
+  font-size: 14px;
+  cursor: pointer;
+}
+
+.catalog-brand input {
+  accent-color: #13426b;
+}
