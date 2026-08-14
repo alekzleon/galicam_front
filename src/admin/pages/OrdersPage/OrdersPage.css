@@ -359,6 +359,100 @@
   gap: 0.75rem;
 }
 
+.orders-panel__regional-note {
+  color: #8b6a20 !important;
+  font-weight: 800;
+}
+
+.orders-panel__regional-list {
+  display: grid;
+  gap: 0.75rem;
+}
+
+.orders-panel__regional-card {
+  border: 1px solid #eadfbd;
+  border-radius: 12px;
+  background: #fffaf0;
+  display: grid;
+  gap: 0.45rem;
+  padding: 0.8rem;
+}
+
+.orders-panel__regional-card > div:first-child {
+  display: flex;
+  justify-content: space-between;
+  gap: 0.75rem;
+  color: #6f5418;
+  font-size: 0.8rem;
+}
+
+.orders-panel__regional-card > div:first-child strong {
+  color: #6f5418;
+}
+
+.orders-panel__transfer-list {
+  display: grid;
+  gap: 0.75rem;
+}
+
+.orders-panel__transfer-card {
+  border: 1px solid #dbe7f5;
+  border-radius: 12px;
+  background: #f8fbff;
+  display: grid;
+  gap: 0.45rem;
+  padding: 0.8rem;
+}
+
+.orders-panel__transfer-card > div:first-child {
+  display: flex;
+  justify-content: space-between;
+  gap: 0.75rem;
+  align-items: center;
+}
+
+.orders-panel__transfer-card > div:first-child strong {
+  color: #0f172a;
+  font-size: 0.86rem;
+}
+
+.orders-panel__transfer-card small,
+.orders-panel__transfer-card em {
+  color: #64748b;
+  font-size: 0.78rem;
+  overflow-wrap: anywhere;
+}
+
+.orders-panel__transfer-card em {
+  color: #b91c1c;
+  font-style: normal;
+  font-weight: 800;
+}
+
+.orders-panel__transfer-status {
+  border-radius: 999px;
+  background: #fef3c7;
+  color: #92400e;
+  font-size: 0.68rem;
+  font-weight: 900;
+  padding: 0.18rem 0.5rem;
+  white-space: nowrap;
+}
+
+.orders-panel__transfer-status.is-paid,
+.orders-panel__transfer-status.is-succeeded,
+.orders-panel__transfer-status.is-completed {
+  background: #dcfce7;
+  color: #166534;
+}
+
+.orders-panel__transfer-status.is-failed,
+.orders-panel__transfer-status.is-canceled,
+.orders-panel__transfer-status.is-cancelled {
+  background: #fee2e2;
+  color: #991b1b;
+}
+
 .orders-panel__item {
   display: grid;
   grid-template-columns: 64px minmax(0, 1fr) auto;
@@ -440,6 +534,23 @@
   color: #991b1b;
   font-size: 0.86rem;
   font-weight: 800;
+}
+
+.orders-panel__readonly {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+  border: 1px solid #dbe4ee;
+  border-radius: 8px;
+  background: #f8fafc;
+  color: #475569;
+  padding: 0.9rem 1rem;
+  font-size: 0.86rem;
+  font-weight: 800;
+}
+
+.orders-panel__readonly i {
+  color: var(--admin-primary);
 }
 
 .orders-panel__footer {

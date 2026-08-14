@@ -13,7 +13,7 @@ import WishlistModal from "../../wishlist/WishlistModal"
 const CART_SUMMARY_STORAGE_KEY = "ecommerce_cart_summary"
 const PRICE_UNAVAILABLE_SOURCE = "precios_articulos_default_missing"
 
-function ProductCard({ product, onFavoriteChange }) {
+function ProductCard({ product, onFavoriteChange, productLinkSearch = "" }) {
   const [favorite, setFavorite] = useState(Boolean(product?.isFavorite || product?.is_favorite))
   const [togglingFavorite, setTogglingFavorite] = useState(false)
   const [addingToCart, setAddingToCart] = useState(false)
@@ -25,6 +25,7 @@ function ProductCard({ product, onFavoriteChange }) {
   const { t } = useLocalization()
 
   const productSlug = product?.slug || ""
+  const productUrl = `/producto/${productSlug}${productLinkSearch || ""}`
   const productImage =
     product?.image || "https://via.placeholder.com/400x400?text=Producto"
   const productName = product?.name || t("productWithoutName")
@@ -95,6 +96,7 @@ function ProductCard({ product, onFavoriteChange }) {
       const response = await addCartItem({
         product_id: product.id,
         quantity: 1,
+        ...buildRegionalCartContext(product),
       })
 
       const cartSummary =
@@ -206,7 +208,7 @@ function ProductCard({ product, onFavoriteChange }) {
           </div>
         ) : null}
 
-        <Link to={`/producto/${productSlug}`}>
+        <Link to={productUrl}>
           <img
             src={productImage}
             alt={productName}
@@ -218,7 +220,7 @@ function ProductCard({ product, onFavoriteChange }) {
       </div>
 
       <div className="product-card__body">
-        <Link to={`/producto/${productSlug}`} className="product-card__title-link">
+        <Link to={productUrl} className="product-card__title-link">
           <h3 className="product-card__title">{productName}</h3>
         </Link>
 
@@ -303,6 +305,16 @@ function ProductCard({ product, onFavoriteChange }) {
       />
     </article>
   )
+}
+
+function buildRegionalCartContext(product = {}) {
+  const regionId = product.regionId ?? product.region_id ?? product.regionalCatalog?.region_id
+  const regionSlug = product.regionSlug ?? product.region_slug ?? product.regionalCatalog?.region_slug
+
+  if (regionId) return { region_id: Number(regionId) }
+  if (regionSlug) return { region_slug: regionSlug }
+
+  return {}
 }
 
 function formatStockMessage(status, t) {

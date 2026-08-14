@@ -29,8 +29,8 @@ export async function getSmartSearchProducts(params = {}) {
   return data
 }
 
-export async function getProductDetail(slug) {
-  const { data } = await api.get(`/products/${slug}`)
+export async function getProductDetail(slug, params = {}) {
+  const { data } = await api.get(`/products/${slug}`, { params })
   return data
 }
 

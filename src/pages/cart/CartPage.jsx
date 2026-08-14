@@ -40,6 +40,7 @@ const emptyCartState = {
   coupon: null,
   last_activity_at: null,
   promotionsApplied: [],
+  regionalSplits: [],
   items: [],
 }
 
@@ -227,6 +228,12 @@ function CartPage() {
         taxableBase: Number(item.taxable_base ?? item.taxableBase ?? 0),
         tax: Number(item.tax ?? item.tax_amount ?? 0),
         taxes: normalizeTaxes(item.taxes),
+        regionalCatalog: normalizeRegionalCatalog(
+          item.regional_catalog ?? item.metadata?.regional_catalog
+        ),
+        marketplace: normalizeMarketplaceSnapshot(
+          item.marketplace ?? item.metadata?.marketplace
+        ),
       }
     })
 
@@ -300,6 +307,9 @@ function CartPage() {
         ),
         snapshot: promotion.snapshot ?? null,
       })),
+      regionalSplits: normalizeRegionalSplits(
+        cartData?.regional_splits ?? cartData?.regionalSplits ?? cartData?.metadata?.regional_splits
+      ),
       items: normalizedItems,
     }
   }, [getCartPayload])
@@ -1105,6 +1115,16 @@ function CartPage() {
                                   </p>
                                 ) : null}
 
+                                {product.regionalCatalog?.region_name || product.regionalCatalog?.region_slug ? (
+                                  <p className="cart_item_meta cart_item_meta--regional">
+                                    {t("cartRegionalSource", {
+                                      region:
+                                        product.regionalCatalog.region_name ||
+                                        product.regionalCatalog.region_slug,
+                                    })}
+                                  </p>
+                                ) : null}
+
                                 {product.promotion ? (
                                   <div className="cart_item_promo_badge is-applied">
                                     {t("cartAppliedPromotion")}: {product.promotion.name || t("currentPromotion")}
@@ -1507,6 +1527,12 @@ function CartPage() {
                   t={t}
                 />
 
+                <RegionalSplitsSummary
+                  splits={cart.regionalSplits}
+                  formatMoney={formatMoney}
+                  t={t}
+                />
+
                 <div className="summary_rows">
                   <div className="summary_row">
                     <span>{t("products")} ({cart.items_count || products.length})</span>
@@ -1720,6 +1746,47 @@ function normalizeTaxBreakdown(taxBreakdown) {
       taxes: normalizeTaxes(item.taxes),
     })),
   }
+}
+
+function normalizeRegionalCatalog(value) {
+  if (!value || typeof value !== "object") return null
+
+  return {
+    region_id: value.region_id ?? null,
+    region_name: value.region_name || "",
+    region_slug: value.region_slug || "",
+    price: Number(value.price ?? 0),
+    stock: value.stock === null || value.stock === undefined ? null : Number(value.stock),
+    commission_rate: Number(value.commission_rate ?? 0),
+  }
+}
+
+function normalizeMarketplaceSnapshot(value) {
+  if (!value || typeof value !== "object") return null
+
+  return {
+    region_id: value.region_id ?? null,
+    commission_rate: Number(value.commission_rate ?? 0),
+    commission_amount: Number(value.commission_amount ?? 0),
+    net_amount: Number(value.net_amount ?? 0),
+    line_total: Number(value.line_total ?? 0),
+  }
+}
+
+function normalizeRegionalSplits(splits) {
+  if (!Array.isArray(splits)) return []
+
+  return splits
+    .filter(Boolean)
+    .map((split) => ({
+      region_id: split.region_id ?? null,
+      region_name: split.region_name || "",
+      region_slug: split.region_slug || "",
+      items_count: Number(split.items_count ?? 0),
+      subtotal: Number(split.subtotal ?? 0),
+      commission_amount: Number(split.commission_amount ?? 0),
+      net_amount: Number(split.net_amount ?? 0),
+    }))
 }
 
 function normalizeLoyalty(loyalty) {
@@ -1983,6 +2050,44 @@ function CartScalePromotion({ product, t }) {
         <small>{t("cartScaleMax")}</small>
       ) : null}
     </div>
+  )
+}
+
+function RegionalSplitsSummary({ splits = [], formatMoney, t }) {
+  if (!Array.isArray(splits) || !splits.length) return null
+
+  return (
+    <section className="summary_regional">
+      <div className="summary_regional_head">
+        <strong>{t("cartRegionalSplitsTitle")}</strong>
+        <span>{t("cartRegionalSplitsText")}</span>
+      </div>
+
+      <div className="summary_regional_list">
+        {splits.map((split) => (
+          <article className="summary_regional_item" key={split.region_id || split.region_slug}>
+            <div>
+              <strong>{split.region_name || split.region_slug || "Regional"}</strong>
+              <span>{t("itemsCount", { count: split.items_count })}</span>
+            </div>
+            <dl>
+              <div>
+                <dt>{t("subtotal")}</dt>
+                <dd>{formatMoney(split.subtotal)}</dd>
+              </div>
+              <div>
+                <dt>{t("commissionEstimated")}</dt>
+                <dd>{formatMoney(split.commission_amount)}</dd>
+              </div>
+              <div>
+                <dt>{t("netEstimated")}</dt>
+                <dd>{formatMoney(split.net_amount)}</dd>
+              </div>
+            </dl>
+          </article>
+        ))}
+      </div>
+    </section>
   )
 }
 

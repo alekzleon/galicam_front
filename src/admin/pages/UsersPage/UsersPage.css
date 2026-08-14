@@ -53,7 +53,8 @@
 }
 
 .user-page__identity,
-.user-page__role {
+.user-page__role,
+.user-page__region {
   display: flex;
   flex-direction: column;
   gap: 0.22rem;
@@ -66,10 +67,17 @@
 }
 
 .user-page__identity span,
-.user-page__role small {
+.user-page__role small,
+.user-page__region span {
   color: #64748b;
   font-size: 0.76rem;
   line-height: 1.35;
+}
+
+.user-page__region strong {
+  color: #1f2937;
+  font-size: 0.84rem;
+  line-height: 1.25;
 }
 
 .user-page__actions {
@@ -152,6 +160,14 @@
 .user-detail .form-select:focus {
   border-color: #94a3b8;
   box-shadow: 0 0 0 3px rgba(148, 163, 184, 0.16);
+}
+
+.user-detail__field-help {
+  display: block;
+  margin-top: 0.32rem;
+  color: #64748b;
+  font-size: 0.72rem;
+  line-height: 1.35;
 }
 
 .user-detail__stats {

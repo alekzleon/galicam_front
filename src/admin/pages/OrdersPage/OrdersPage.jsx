@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useMemo, useState } from "react"
 import AdminCard from "../../components/AdminCard/AdminCard"
 import AdminSidePanel from "../../../components/AdminSidePanel/AdminSidePanel"
+import { useAuth } from "../../../context/AuthContext"
 import {
   cancelAdminOrder,
   downloadAdminOrderPurchaseOrder,
@@ -10,6 +11,8 @@ import {
 import { notifyError, notifySuccess, notifyWarning } from "../../../utils/toast"
 import { normalizeMediaUrl } from "../../../utils/mediaUrl"
 import "./OrdersPage.css"
+
+const REGIONAL_ADMIN_ROLE = "centro_regional_admin"
 
 const INITIAL_FILTERS = {
   search: "",
@@ -38,6 +41,8 @@ const SORT_OPTIONS = [
 ]
 
 function OrdersPage() {
+  const { user } = useAuth()
+  const isRegionalAdmin = getUserRoleName(user) === REGIONAL_ADMIN_ROLE
   const [orders, setOrders] = useState([])
   const [meta, setMeta] = useState(createEmptyMeta())
   const [filters, setFilters] = useState(INITIAL_FILTERS)
@@ -119,6 +124,10 @@ function OrdersPage() {
 
   async function handleCancelOrder(order = selectedOrder) {
     if (!order?.id) return
+    if (isRegionalAdmin) {
+      notifyWarning("Tu usuario regional solo puede consultar pedidos.")
+      return
+    }
     if (!window.confirm(`¿Cancelar el pedido ${order.number || `#${order.id}`}?`)) return
 
     try {
@@ -295,16 +304,18 @@ function OrdersPage() {
                           >
                             <i className="bi bi-file-earmark-pdf" aria-hidden="true" />
                           </button>
-                          <button
-                            type="button"
-                            className="orders-icon-button orders-icon-button--cancel"
-                            onClick={() => handleCancelOrder(order)}
-                            title="Cancelar pedido"
-                            aria-label={`Cancelar ${order.number}`}
-                            disabled={order.status === "paid"}
-                          >
-                            <i className="bi bi-x-lg" aria-hidden="true" />
-                          </button>
+                          {!isRegionalAdmin ? (
+                            <button
+                              type="button"
+                              className="orders-icon-button orders-icon-button--cancel"
+                              onClick={() => handleCancelOrder(order)}
+                              title="Cancelar pedido"
+                              aria-label={`Cancelar ${order.number}`}
+                              disabled={order.status === "paid"}
+                            >
+                              <i className="bi bi-x-lg" aria-hidden="true" />
+                            </button>
+                          ) : null}
                         </div>
                       </td>
                     </tr>
@@ -371,6 +382,7 @@ function OrdersPage() {
             order={selectedOrder}
             saving={saving}
             onCancelOrder={handleCancelOrder}
+            canCancel={!isRegionalAdmin}
           />
         ) : null}
       </AdminSidePanel>
@@ -378,7 +390,7 @@ function OrdersPage() {
   )
 }
 
-function OrderDetail({ order, saving, onCancelOrder }) {
+function OrderDetail({ order, saving, onCancelOrder, canCancel = true }) {
   const coupon = order.metadata?.coupon
   const loyalty = order.metadata?.loyalty
   const cashback = loyalty?.cashback
@@ -446,6 +458,11 @@ function OrderDetail({ order, saving, onCancelOrder }) {
                   <strong>{item.name}</strong>
                   <span>{formatSelectedAttributes(item.selected_attributes)}</span>
                   <small>SKU: {item.sku || "N/D"}</small>
+                  {item.regional_catalog?.region_name || item.regional_catalog?.region_slug ? (
+                    <small className="orders-panel__regional-note">
+                      Centro regional: {item.regional_catalog.region_name || item.regional_catalog.region_slug}
+                    </small>
+                  ) : null}
                 </div>
                 <div className="orders-panel__item-numbers">
                   <span>Cant. {item.quantity}</span>
@@ -462,6 +479,51 @@ function OrderDetail({ order, saving, onCancelOrder }) {
       </section>
 
       <section className="orders-panel__grid">
+        {order.regional_splits.length ? (
+          <div className="orders-panel__section">
+            <h4>Distribución regional</h4>
+            <div className="orders-panel__regional-list">
+              {order.regional_splits.map((split) => (
+                <article className="orders-panel__regional-card" key={split.region_id || split.region_slug}>
+                  <div>
+                    <strong>{split.region_name || split.region_slug || "Regional"}</strong>
+                    <span>{split.items_count} producto(s)</span>
+                  </div>
+                  <InfoRow label="Subtotal" value={formatMoney(split.subtotal, order.currency)} />
+                  <InfoRow label="Impuestos" value={formatMoney(split.tax, order.currency)} />
+                  <InfoRow label="Total regional" value={formatMoney(split.total, order.currency)} />
+                  <InfoRow label="Comisión estimada" value={formatMoney(split.commission_amount, order.currency)} />
+                  <InfoRow label="Transfer estimado" value={formatMoney(split.transfer_amount || split.net_amount, order.currency)} strong />
+                </article>
+              ))}
+            </div>
+          </div>
+        ) : null}
+
+        {order.marketplace_transfers.length ? (
+          <div className="orders-panel__section">
+            <h4>Transfers marketplace</h4>
+            <div className="orders-panel__transfer-list">
+              {order.marketplace_transfers.map((transfer) => (
+                <article className="orders-panel__transfer-card" key={transfer.id || transfer.stripe_transfer_id || transfer.region_id}>
+                  <div>
+                    <strong>{transfer.region_name || transfer.region_slug || `Región #${transfer.region_id}`}</strong>
+                    <span className={`orders-panel__transfer-status is-${transfer.status}`}>
+                      {getMarketplaceTransferStatusLabel(transfer.status)}
+                    </span>
+                  </div>
+                  <small>{transfer.stripe_account_id || "Sin cuenta Stripe"}</small>
+                  <InfoRow label="Bruto" value={formatMoney(transfer.gross_amount, transfer.currency)} />
+                  <InfoRow label="Comisión" value={formatMoney(transfer.commission_amount, transfer.currency)} />
+                  <InfoRow label="Transferido" value={formatMoney(transfer.transfer_amount, transfer.currency)} strong />
+                  {transfer.stripe_transfer_id ? <small>Stripe: {transfer.stripe_transfer_id}</small> : null}
+                  {transfer.error_message ? <em>{transfer.error_message}</em> : null}
+                </article>
+              ))}
+            </div>
+          </div>
+        ) : null}
+
         <div className="orders-panel__section">
           <h4>Ahorros y cashback</h4>
           <div className="orders-panel__saving-grid">
@@ -486,17 +548,24 @@ function OrderDetail({ order, saving, onCancelOrder }) {
         </div>
       </section>
 
-      <div className="orders-panel__danger">
-        <button
-          type="button"
-          className="orders-button orders-button--danger"
-          onClick={() => onCancelOrder(order)}
-          disabled={saving || order.status === "paid"}
-        >
-          Cancelar pedido
-        </button>
-        {order.status === "paid" ? <span>Los pedidos pagados no se cancelan desde este endpoint.</span> : null}
-      </div>
+      {canCancel ? (
+        <div className="orders-panel__danger">
+          <button
+            type="button"
+            className="orders-button orders-button--danger"
+            onClick={() => onCancelOrder(order)}
+            disabled={saving || order.status === "paid"}
+          >
+            Cancelar pedido
+          </button>
+          {order.status === "paid" ? <span>Los pedidos pagados no se cancelan desde este endpoint.</span> : null}
+        </div>
+      ) : (
+        <div className="orders-panel__readonly">
+          <i className="bi bi-eye" aria-hidden="true" />
+          <span>Consulta regional sin acciones de modificación.</span>
+        </div>
+      )}
     </div>
   )
 }
@@ -516,6 +585,10 @@ function PaymentBadge({ status }) {
 
 function normalizeOrders(items = []) {
   return Array.isArray(items) ? items.map(normalizeOrder) : []
+}
+
+function getUserRoleName(user) {
+  return String(user?.role?.name || user?.role_name || user?.role || "").toLowerCase()
 }
 
 function normalizeOrder(order = {}) {
@@ -541,6 +614,7 @@ function normalizeOrder(order = {}) {
     paid_at: order.paid_at || null,
     created_at: order.created_at || null,
     updated_at: order.updated_at || null,
+    regional_splits: normalizeRegionalSplits(order.regional_splits ?? order.metadata?.regional_splits),
   }
 }
 
@@ -554,6 +628,8 @@ function normalizeOrderDetail(order = {}) {
     items: Array.isArray(order.items) ? order.items.map(normalizeOrderItem) : [],
     payments: Array.isArray(order.payments) ? order.payments : [],
     metadata: order.metadata && typeof order.metadata === "object" ? order.metadata : {},
+    regional_splits: normalizeRegionalSplits(order.regional_splits ?? order.metadata?.regional_splits),
+    marketplace_transfers: normalizeMarketplaceTransfers(order.marketplace_transfers),
   }
 }
 
@@ -575,7 +651,74 @@ function normalizeOrderItem(item = {}) {
     line_total: Number(item.line_total || 0),
     promotion: item.promotion || null,
     metadata: item.metadata || {},
+    regional_catalog: normalizeRegionalCatalog(item.regional_catalog ?? item.metadata?.regional_catalog),
+    marketplace: normalizeMarketplaceSnapshot(item.marketplace ?? item.metadata?.marketplace),
   }
+}
+
+function normalizeRegionalCatalog(value) {
+  if (!value || typeof value !== "object") return null
+
+  return {
+    region_id: value.region_id ?? null,
+    region_name: value.region_name || "",
+    region_slug: value.region_slug || "",
+    price: Number(value.price ?? 0),
+    stock: value.stock === null || value.stock === undefined ? null : Number(value.stock),
+    commission_rate: Number(value.commission_rate ?? 0),
+  }
+}
+
+function normalizeMarketplaceSnapshot(value) {
+  if (!value || typeof value !== "object") return null
+
+  return {
+    region_id: value.region_id ?? null,
+    commission_rate: Number(value.commission_rate ?? 0),
+    commission_amount: Number(value.commission_amount ?? 0),
+    net_amount: Number(value.net_amount ?? 0),
+    line_total: Number(value.line_total ?? 0),
+  }
+}
+
+function normalizeRegionalSplits(splits) {
+  if (!Array.isArray(splits)) return []
+
+  return splits
+    .filter(Boolean)
+    .map((split) => ({
+      region_id: split.region_id ?? null,
+      region_name: split.region_name || "",
+      region_slug: split.region_slug || "",
+      items_count: Number(split.items_count ?? 0),
+      subtotal: Number(split.subtotal ?? 0),
+      tax: Number(split.tax ?? 0),
+      total: Number(split.total ?? split.subtotal ?? 0),
+      commission_amount: Number(split.commission_amount ?? 0),
+      net_amount: Number(split.net_amount ?? 0),
+      transfer_amount: Number(split.transfer_amount ?? split.net_amount ?? 0),
+    }))
+}
+
+function normalizeMarketplaceTransfers(transfers) {
+  if (!Array.isArray(transfers)) return []
+
+  return transfers
+    .filter(Boolean)
+    .map((transfer) => ({
+      id: transfer.id ?? null,
+      region_id: transfer.region_id ?? null,
+      region_name: transfer.region?.name || transfer.region_name || "",
+      region_slug: transfer.region?.slug || transfer.region_slug || "",
+      stripe_account_id: transfer.stripe_account_id || transfer.account_id || "",
+      gross_amount: Number(transfer.gross_amount ?? 0),
+      commission_amount: Number(transfer.commission_amount ?? 0),
+      transfer_amount: Number(transfer.transfer_amount ?? transfer.net_amount ?? 0),
+      currency: transfer.currency || "mxn",
+      status: transfer.status || "pending",
+      error_message: transfer.error_message || transfer.error || "",
+      stripe_transfer_id: transfer.stripe_transfer_id || "",
+    }))
 }
 
 function normalizeSelectedAttributes(attributes) {
@@ -624,6 +767,21 @@ function getPaymentStatusLabel(status) {
   }
 
   return labels[status] || "Sin pago"
+}
+
+function getMarketplaceTransferStatusLabel(status) {
+  const labels = {
+    pending: "Pendiente",
+    processing: "Procesando",
+    paid: "Pagado",
+    succeeded: "Exitoso",
+    completed: "Completado",
+    failed: "Fallido",
+    canceled: "Cancelado",
+    cancelled: "Cancelado",
+  }
+
+  return labels[status] || status || "Pendiente"
 }
 
 function formatMoney(value, currency = "mxn") {

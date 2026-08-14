@@ -1,7 +1,13 @@
 import { useCallback, useEffect, useMemo, useState } from "react"
-import { getAdminDashboard } from "../../../services/api/adminDashboardService"
+import { useAuth } from "../../../context/AuthContext"
+import {
+  getAdminDashboard,
+  getAdminMarketplaceDashboard,
+} from "../../../services/api/adminDashboardService"
 import { notifyError } from "../../../utils/toast"
 import "./DashboardPage.css"
+
+const REGIONAL_ADMIN_ROLE = "centro_regional_admin"
 
 const QUICK_RANGES = [
   { key: "today", label: "Hoy", days: 1 },
@@ -10,6 +16,7 @@ const QUICK_RANGES = [
 ]
 
 const EMPTY_DASHBOARD = {
+  type: "global",
   filters: getDefaultFilters(),
   summary: {
     sales: 0,
@@ -44,20 +51,53 @@ const EMPTY_DASHBOARD = {
   },
 }
 
+const EMPTY_MARKETPLACE_DASHBOARD = {
+  type: "marketplace",
+  filters: getDefaultFilters(),
+  summary: {
+    orders: 0,
+    gross_amount: 0,
+    commission_amount: 0,
+    net_amount: 0,
+    transfer_amount: 0,
+    transferred_amount: 0,
+    failed_transfer_amount: 0,
+  },
+  regions: [],
+  transfers_by_status: [],
+  stripe_connect: {},
+  recent_orders: [],
+  recent_transfers: [],
+}
+
 function DashboardPage() {
+  const { user } = useAuth()
+  const isRegionalAdmin = getUserRoleName(user) === REGIONAL_ADMIN_ROLE
+  const [dashboardMode, setDashboardMode] = useState(isRegionalAdmin ? "marketplace" : "global")
   const [dashboard, setDashboard] = useState(EMPTY_DASHBOARD)
   const [filters, setFilters] = useState(getDefaultFilters)
   const [loading, setLoading] = useState(true)
   const [refreshing, setRefreshing] = useState(false)
 
-  const summaryCards = useMemo(() => buildSummaryCards(dashboard.summary), [dashboard.summary])
+  const isMarketplaceMode = dashboardMode === "marketplace"
+  const summaryCards = useMemo(
+    () => isMarketplaceMode ? buildMarketplaceSummaryCards(dashboard.summary) : buildSummaryCards(dashboard.summary),
+    [dashboard.summary, isMarketplaceMode]
+  )
   const activeQuickRange = useMemo(() => getActiveQuickRange(filters), [filters])
 
-  const loadDashboard = useCallback(async (nextFilters) => {
+  const loadDashboard = useCallback(async (nextFilters, nextMode = dashboardMode) => {
     try {
       setRefreshing(true)
-      const dashboardResponse = await getAdminDashboard(nextFilters)
-      const normalizedDashboard = normalizeDashboardResponse(dashboardResponse)
+      const normalizedFilters = nextMode === "marketplace"
+        ? cleanMarketplaceFilters(nextFilters, isRegionalAdmin)
+        : nextFilters
+      const dashboardResponse = nextMode === "marketplace"
+        ? await getAdminMarketplaceDashboard(normalizedFilters)
+        : await getAdminDashboard(normalizedFilters)
+      const normalizedDashboard = nextMode === "marketplace"
+        ? normalizeMarketplaceDashboardResponse(dashboardResponse)
+        : normalizeDashboardResponse(dashboardResponse)
       setDashboard(normalizedDashboard)
       setFilters(normalizedDashboard.filters)
     } catch (error) {
@@ -67,11 +107,16 @@ function DashboardPage() {
       setLoading(false)
       setRefreshing(false)
     }
-  }, [])
+  }, [dashboardMode, isRegionalAdmin])
 
   useEffect(() => {
-    loadDashboard(getDefaultFilters())
-  }, [loadDashboard])
+    const nextMode = isRegionalAdmin ? "marketplace" : dashboardMode
+    if (isRegionalAdmin && dashboardMode !== "marketplace") {
+      setDashboardMode("marketplace")
+      return
+    }
+    loadDashboard(cleanFiltersForMode(filters, nextMode, isRegionalAdmin), nextMode)
+  }, [dashboardMode, isRegionalAdmin, loadDashboard])
 
   function handleFilterChange(event) {
     const { name, value } = event.target
@@ -83,21 +128,56 @@ function DashboardPage() {
 
   function handleSubmit(event) {
     event.preventDefault()
-    loadDashboard(filters)
+    loadDashboard(filters, dashboardMode)
   }
 
   function applyQuickRange(range) {
-    const nextFilters = getRangeFilters(range.days)
+    const nextFilters = {
+      ...cleanFiltersForMode(filters, dashboardMode, isRegionalAdmin),
+      ...getRangeFilters(range.days),
+    }
     setFilters(nextFilters)
-    loadDashboard(nextFilters)
+    loadDashboard(nextFilters, dashboardMode)
+  }
+
+  function handleModeChange(nextMode) {
+    if (nextMode === dashboardMode) return
+    setDashboardMode(nextMode)
+    setLoading(true)
+    const nextFilters = cleanFiltersForMode(filters, nextMode, isRegionalAdmin)
+    setFilters(nextFilters)
   }
 
   return (
     <div className="dashboard-page">
       <header className="dashboard-page__header">
         <div>
-          <h1>Dashboard</h1>
-          <p>Resumen comercial, clientes, carritos, cashback y pedidos recientes.</p>
+          <h1>{isMarketplaceMode ? "Dashboard marketplace" : "Dashboard"}</h1>
+          <p>
+            {isMarketplaceMode
+              ? "Resumen regional de pedidos, comisiones, transfers y Stripe Connect."
+              : "Resumen comercial, clientes, carritos, cashback y pedidos recientes."}
+          </p>
+          {!isRegionalAdmin ? (
+            <div className="dashboard-mode-toggle" aria-label="Tipo de dashboard">
+              <button
+                type="button"
+                className={dashboardMode === "global" ? "is-active" : ""}
+                onClick={() => handleModeChange("global")}
+                disabled={refreshing}
+              >
+                Global
+              </button>
+              <button
+                type="button"
+                className={dashboardMode === "marketplace" ? "is-active" : ""}
+                onClick={() => handleModeChange("marketplace")}
+                disabled={refreshing}
+              >
+                Marketplace
+              </button>
+            </div>
+          ) : null}
         </div>
 
         <form className="dashboard-filters" onSubmit={handleSubmit}>
@@ -124,6 +204,19 @@ function DashboardPage() {
             <span>Hasta</span>
             <input type="date" name="to" value={filters.to} onChange={handleFilterChange} />
           </label>
+          {isMarketplaceMode && !isRegionalAdmin ? (
+            <label className="dashboard-filters__region">
+              <span>Región ID</span>
+              <input
+                type="number"
+                min="1"
+                name="region_id"
+                value={filters.region_id || ""}
+                onChange={handleFilterChange}
+                placeholder="Todas"
+              />
+            </label>
+          ) : null}
           <button type="submit" disabled={refreshing}>
             {refreshing ? "Actualizando..." : "Aplicar"}
           </button>
@@ -145,6 +238,10 @@ function DashboardPage() {
         ))}
       </section>
 
+      {isMarketplaceMode ? (
+        <MarketplaceDashboardView dashboard={dashboard} loading={loading} />
+      ) : (
+        <>
       <section className="dashboard-page__middle">
         <article className="dashboard-widget dashboard-widget--chart">
           <WidgetHeader
@@ -199,6 +296,8 @@ function DashboardPage() {
           <RecentOrdersTable items={dashboard.tables.recent_orders} loading={loading} />
         </article>
       </section>
+        </>
+      )}
     </div>
   )
 }
@@ -413,6 +512,193 @@ function RecentOrdersTable({ items, loading }) {
   )
 }
 
+function MarketplaceDashboardView({ dashboard, loading }) {
+  return (
+    <>
+      <section className="dashboard-page__middle">
+        <article className="dashboard-widget dashboard-widget--table">
+          <WidgetHeader title="Centros regionales" description="Bruto, comisión y neto por región" />
+          <MarketplaceRegionsTable items={dashboard.regions} loading={loading} />
+        </article>
+
+        <article className="dashboard-widget dashboard-widget--table">
+          <WidgetHeader title="Transfers por estatus" description="Auditoría de Stripe Connect" />
+          <MarketplaceTransferStatusList items={dashboard.transfers_by_status} loading={loading} />
+        </article>
+      </section>
+
+      <section className="dashboard-page__middle">
+        <article className="dashboard-widget dashboard-widget--table">
+          <WidgetHeader title="Pedidos recientes" description="Pedidos regionales del periodo" />
+          <MarketplaceOrdersTable items={dashboard.recent_orders} loading={loading} />
+        </article>
+
+        <article className="dashboard-widget dashboard-widget--table">
+          <WidgetHeader title="Transfers recientes" description="Últimos movimientos por centro" />
+          <MarketplaceTransfersTable items={dashboard.recent_transfers} loading={loading} />
+        </article>
+      </section>
+
+      <section className="dashboard-page__bottom dashboard-page__bottom--single">
+        <article className="dashboard-widget dashboard-widget--table">
+          <WidgetHeader title="Stripe Connect" description="Estado de la cuenta conectada en el contexto actual" />
+          <StripeConnectSummary value={dashboard.stripe_connect} loading={loading} />
+        </article>
+      </section>
+    </>
+  )
+}
+
+function MarketplaceRegionsTable({ items, loading }) {
+  if (loading) return <TableSkeleton rows={5} />
+  if (!items.length) return <EmptyState text="Sin centros regionales en el periodo." />
+
+  return (
+    <div className="dashboard-table dashboard-table--marketplace-regions">
+      <div className="dashboard-table__head">
+        <span>Región</span>
+        <span>Pedidos</span>
+        <span>Bruto</span>
+        <span>Comisión</span>
+        <span>Neto</span>
+      </div>
+      <div className="dashboard-table__body">
+        {items.map((item) => (
+          <div className="dashboard-table__row" key={item.region_id || item.region_slug || item.name}>
+            <strong>{item.name || item.region_name || item.region_slug || "Regional"}</strong>
+            <span>{formatNumber(item.orders)}</span>
+            <span>{formatMoney(item.gross_amount)}</span>
+            <span>{formatMoney(item.commission_amount)}</span>
+            <span>{formatMoney(item.net_amount || item.transfer_amount)}</span>
+          </div>
+        ))}
+      </div>
+    </div>
+  )
+}
+
+function MarketplaceTransferStatusList({ items, loading }) {
+  if (loading) return <TableSkeleton rows={4} />
+  if (!items.length) return <EmptyState text="Sin transfers registrados." />
+
+  return (
+    <div className="dashboard-marketplace-status-list">
+      {items.map((item) => (
+        <div className="dashboard-marketplace-status" key={item.status}>
+          <div>
+            <span className={`dashboard-status is-${item.status}`}>{translateTransferStatus(item.status)}</span>
+            <strong>{formatMoney(item.amount || item.transfer_amount || item.total)}</strong>
+          </div>
+          <small>{formatNumber(item.count)} movimiento(s)</small>
+        </div>
+      ))}
+    </div>
+  )
+}
+
+function MarketplaceOrdersTable({ items, loading }) {
+  if (loading) return <TableSkeleton rows={5} />
+  if (!items.length) return <EmptyState text="Sin pedidos regionales recientes." />
+
+  return (
+    <div className="dashboard-table dashboard-table--marketplace-orders">
+      <div className="dashboard-table__head">
+        <span>Pedido</span>
+        <span>Región</span>
+        <span>Total</span>
+        <span>Comisión</span>
+        <span>Fecha</span>
+      </div>
+      <div className="dashboard-table__body">
+        {items.map((item) => (
+          <div className="dashboard-table__row" key={item.id || item.number}>
+            <strong>{item.number || `#${item.id}`}</strong>
+            <span>{item.region_name || item.region_slug || "Regional"}</span>
+            <span>{formatMoney(item.total || item.gross_amount, item.currency)}</span>
+            <span>{formatMoney(item.commission_amount, item.currency)}</span>
+            <span>{formatDateTime(item.created_at)}</span>
+          </div>
+        ))}
+      </div>
+    </div>
+  )
+}
+
+function MarketplaceTransfersTable({ items, loading }) {
+  if (loading) return <TableSkeleton rows={5} />
+  if (!items.length) return <EmptyState text="Sin transfers recientes." />
+
+  return (
+    <div className="dashboard-table dashboard-table--marketplace-transfers">
+      <div className="dashboard-table__head">
+        <span>Región</span>
+        <span>Estatus</span>
+        <span>Bruto</span>
+        <span>Transfer</span>
+        <span>Stripe</span>
+      </div>
+      <div className="dashboard-table__body">
+        {items.map((item) => (
+          <div className="dashboard-table__row" key={item.id || item.stripe_transfer_id || item.region_id}>
+            <strong>{item.region_name || item.region_slug || `Región #${item.region_id}`}</strong>
+            <span className={`dashboard-status is-${item.status}`}>{translateTransferStatus(item.status)}</span>
+            <span>{formatMoney(item.gross_amount, item.currency)}</span>
+            <span>{formatMoney(item.transfer_amount || item.net_amount, item.currency)}</span>
+            <span>{item.stripe_transfer_id || item.stripe_account_id || "-"}</span>
+          </div>
+        ))}
+      </div>
+    </div>
+  )
+}
+
+function StripeConnectSummary({ value, loading }) {
+  if (loading) return <TableSkeleton rows={3} />
+  const items = normalizeStripeConnectItems(value)
+  if (!items.length) return <EmptyState text="Sin información de Stripe Connect." />
+
+  return (
+    <div className="dashboard-stripe-connect">
+      {items.map((item, index) => (
+        <article key={item.region_id || item.account_id || index}>
+          <div>
+            <strong>{item.region_name || item.region_slug || item.name || "Cuenta regional"}</strong>
+            <span className={`dashboard-status is-${item.status || "pending"}`}>
+              {translateTransferStatus(item.status || "pending")}
+            </span>
+          </div>
+          <small>{item.account_id || item.stripe_account_id || "Sin cuenta Stripe"}</small>
+          <div className="dashboard-stripe-connect__checks">
+            <span className={item.details_submitted ? "is-ok" : ""}>Datos {item.details_submitted ? "listos" : "pendientes"}</span>
+            <span className={item.charges_enabled ? "is-ok" : ""}>Cobros {item.charges_enabled ? "activos" : "pendientes"}</span>
+            <span className={item.payouts_enabled ? "is-ok" : ""}>Payouts {item.payouts_enabled ? "activos" : "pendientes"}</span>
+          </div>
+        </article>
+      ))}
+    </div>
+  )
+}
+
+function normalizeStripeConnectItems(value) {
+  const source = Array.isArray(value) ? value : value && typeof value === "object" ? [value] : []
+
+  return source.filter((item) => {
+    if (!item || typeof item !== "object") return false
+
+    return Boolean(
+      item.region_id ||
+      item.region_name ||
+      item.region_slug ||
+      item.account_id ||
+      item.stripe_account_id ||
+      item.status ||
+      item.details_submitted ||
+      item.charges_enabled ||
+      item.payouts_enabled
+    )
+  })
+}
+
 function ChartSkeleton() {
   return (
     <div className="dashboard-skeleton-chart" aria-hidden="true">
@@ -493,6 +779,53 @@ function buildSummaryCards(summary) {
   ]
 }
 
+function buildMarketplaceSummaryCards(summary) {
+  return [
+    {
+      title: "Pedidos",
+      value: formatNumber(summary.orders),
+      icon: "bi-receipt",
+      color: "is-cyan",
+    },
+    {
+      title: "Bruto",
+      value: formatMoney(summary.gross_amount),
+      icon: "bi-cash-stack",
+      color: "is-blue",
+    },
+    {
+      title: "Comisión",
+      value: formatMoney(summary.commission_amount),
+      icon: "bi-percent",
+      color: "is-orange",
+    },
+    {
+      title: "Neto regional",
+      value: formatMoney(summary.net_amount),
+      icon: "bi-bank",
+      color: "is-green",
+    },
+    {
+      title: "Transfer estimado",
+      value: formatMoney(summary.transfer_amount),
+      icon: "bi-arrow-left-right",
+      color: "is-purple",
+    },
+    {
+      title: "Transferido",
+      value: formatMoney(summary.transferred_amount),
+      icon: "bi-check2-circle",
+      color: "is-green",
+    },
+    {
+      title: "Fallido",
+      value: formatMoney(summary.failed_transfer_amount),
+      icon: "bi-exclamation-triangle",
+      color: "is-red",
+    },
+  ]
+}
+
 function normalizeDashboardResponse(response) {
   const data = response?.data || response || {}
   const payload = data.data || data
@@ -521,6 +854,25 @@ function normalizeDashboardResponse(response) {
   }
 }
 
+function normalizeMarketplaceDashboardResponse(response) {
+  const data = response?.data || response || {}
+  const payload = data.data || data
+
+  return {
+    type: "marketplace",
+    filters: {
+      ...EMPTY_MARKETPLACE_DASHBOARD.filters,
+      ...(payload.filters || {}),
+    },
+    summary: normalizeMarketplaceSummary(payload.summary),
+    regions: normalizeMarketplaceRegions(payload.regions),
+    transfers_by_status: normalizeTransfersByStatus(payload.transfers_by_status),
+    stripe_connect: payload.stripe_connect || {},
+    recent_orders: normalizeMarketplaceOrders(payload.recent_orders),
+    recent_transfers: normalizeMarketplaceTransfers(payload.recent_transfers),
+  }
+}
+
 function normalizeSummary(summary = {}) {
   return Object.fromEntries(
     Object.entries(EMPTY_DASHBOARD.summary).map(([key, fallback]) => [
@@ -528,6 +880,79 @@ function normalizeSummary(summary = {}) {
       Number(summary?.[key] ?? fallback),
     ])
   )
+}
+
+function normalizeMarketplaceSummary(summary = {}) {
+  return Object.fromEntries(
+    Object.entries(EMPTY_MARKETPLACE_DASHBOARD.summary).map(([key, fallback]) => [
+      key,
+      Number(summary?.[key] ?? fallback),
+    ])
+  )
+}
+
+function normalizeMarketplaceRegions(items = []) {
+  return Array.isArray(items)
+    ? items.map((item) => ({
+        region_id: item.region_id ?? item.id ?? null,
+        region_name: item.region_name || item.name || "",
+        region_slug: item.region_slug || item.slug || "",
+        name: item.name || item.region_name || "",
+        orders: Number(item.orders ?? item.orders_count ?? 0),
+        gross_amount: Number(item.gross_amount ?? item.total ?? 0),
+        commission_amount: Number(item.commission_amount ?? 0),
+        net_amount: Number(item.net_amount ?? item.transfer_amount ?? 0),
+        transfer_amount: Number(item.transfer_amount ?? item.net_amount ?? 0),
+      }))
+    : []
+}
+
+function normalizeTransfersByStatus(items = []) {
+  return Array.isArray(items)
+    ? items.map((item) => ({
+        status: item.status || "pending",
+        count: Number(item.count ?? item.total_count ?? 0),
+        amount: Number(item.amount ?? item.transfer_amount ?? item.total ?? 0),
+        transfer_amount: Number(item.transfer_amount ?? item.amount ?? item.total ?? 0),
+        total: Number(item.total ?? item.amount ?? 0),
+      }))
+    : []
+}
+
+function normalizeMarketplaceOrders(items = []) {
+  return Array.isArray(items)
+    ? items.map((item) => ({
+        id: item.id,
+        number: item.number || `#${item.id}`,
+        region_id: item.region_id ?? null,
+        region_name: item.region_name || item.region?.name || "",
+        region_slug: item.region_slug || item.region?.slug || "",
+        total: Number(item.total ?? item.gross_amount ?? 0),
+        gross_amount: Number(item.gross_amount ?? item.total ?? 0),
+        commission_amount: Number(item.commission_amount ?? 0),
+        currency: item.currency || "mxn",
+        created_at: item.created_at || null,
+      }))
+    : []
+}
+
+function normalizeMarketplaceTransfers(items = []) {
+  return Array.isArray(items)
+    ? items.map((item) => ({
+        id: item.id,
+        region_id: item.region_id ?? null,
+        region_name: item.region_name || item.region?.name || "",
+        region_slug: item.region_slug || item.region?.slug || "",
+        stripe_account_id: item.stripe_account_id || item.account_id || "",
+        stripe_transfer_id: item.stripe_transfer_id || "",
+        status: item.status || "pending",
+        gross_amount: Number(item.gross_amount ?? 0),
+        commission_amount: Number(item.commission_amount ?? 0),
+        transfer_amount: Number(item.transfer_amount ?? item.net_amount ?? 0),
+        net_amount: Number(item.net_amount ?? item.transfer_amount ?? 0),
+        currency: item.currency || "mxn",
+      }))
+    : []
 }
 
 function normalizeSalesByDay(items = []) {
@@ -616,6 +1041,32 @@ function normalizeRecentOrders(items = []) {
 
 function getDefaultFilters() {
   return getRangeFilters(30)
+}
+
+function cleanFiltersForMode(filters = {}, mode = "global", isRegionalAdmin = false) {
+  if (mode === "marketplace") return cleanMarketplaceFilters(filters, isRegionalAdmin)
+
+  return {
+    from: filters.from || "",
+    to: filters.to || "",
+  }
+}
+
+function cleanMarketplaceFilters(filters = {}, isRegionalAdmin = false) {
+  const nextFilters = {
+    from: filters.from || "",
+    to: filters.to || "",
+  }
+
+  if (!isRegionalAdmin && filters.region_id) {
+    nextFilters.region_id = filters.region_id
+  }
+
+  return nextFilters
+}
+
+function getUserRoleName(user) {
+  return String(user?.role?.name || user?.role_name || user?.role || "").toLowerCase()
 }
 
 function getRangeFilters(days) {
@@ -708,6 +1159,22 @@ function translateCartStatus(status) {
     abandoned: "Abandonados",
     converted: "Convertidos",
     recovered: "Recuperados",
+  }
+
+  return map[String(status || "").toLowerCase()] || status || "Sin estatus"
+}
+
+function translateTransferStatus(status) {
+  const map = {
+    pending: "Pendiente",
+    pending_onboarding: "Onboarding pendiente",
+    processing: "Procesando",
+    paid: "Pagado",
+    succeeded: "Completado",
+    transferred: "Transferido",
+    failed: "Fallido",
+    canceled: "Cancelado",
+    cancelled: "Cancelado",
   }
 
   return map[String(status || "").toLowerCase()] || status || "Sin estatus"

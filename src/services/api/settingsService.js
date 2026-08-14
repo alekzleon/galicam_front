@@ -76,6 +76,11 @@ export async function getPublicHome() {
   return data
 }
 
+export async function getPublicHomeSections() {
+  const { data } = await api.get("/home/sections")
+  return data
+}
+
 export async function getAdminSettings() {
   const { data } = await api.get("/admin/settings")
   return data

@@ -1,74 +1,15 @@
-import { Link } from "react-router-dom"
 import { useRef } from "react"
+import { Link } from "react-router-dom"
 import { useLocalization } from "../../../context/LocalizationContext"
 import "./newproductscarousel.css"
 
-const NEW_PRODUCTS = [
-  {
-    id: 1,
-    title: "Ceramica de barro negro",
-    category: "Piezas de autor",
-    image: "https://images.unsplash.com/photo-1610701596007-11502861dcfa?auto=format&fit=crop&w=900&q=85",
-  },
-  {
-    id: 2,
-    title: "Textiles para el hogar",
-    category: "Hogar artesanal",
-    image: "https://images.unsplash.com/photo-1616486338812-3dadae4b4ace?auto=format&fit=crop&w=900&q=85",
-  },
-  {
-    id: 3,
-    title: "Joyeria de declaracion",
-    category: "Coleccion nueva",
-    image: "https://images.unsplash.com/photo-1605100804763-247f67b3557e?auto=format&fit=crop&w=900&q=85",
-  },
-  {
-    id: 4,
-    title: "Sillas tejidas",
-    category: "Diseno natural",
-    image: "https://images.unsplash.com/photo-1586023492125-27b2c045efd7?auto=format&fit=crop&w=900&q=85",
-  },
-  {
-    id: 5,
-    title: "Vasijas pintadas",
-    category: "Ceramica",
-    image: "https://images.unsplash.com/photo-1578662996442-48f60103fc96?auto=format&fit=crop&w=900&q=85",
-  },
-  {
-    id: 6,
-    title: "Bolsas tejidas",
-    category: "Moda artesanal",
-    image: "https://images.unsplash.com/photo-1590874103328-eac38a683ce7?auto=format&fit=crop&w=900&q=85",
-  },
-  {
-    id: 7,
-    title: "Anillos con piedra",
-    category: "Joyeria",
-    image: "https://images.unsplash.com/photo-1515562141207-7a88fb7ce338?auto=format&fit=crop&w=900&q=85",
-  },
-  {
-    id: 8,
-    title: "Cesteria decorativa",
-    category: "Decoracion",
-    image: "https://images.unsplash.com/photo-1598300042247-d088f8ab3a91?auto=format&fit=crop&w=900&q=85",
-  },
-  {
-    id: 9,
-    title: "Arte mural tejido",
-    category: "Paredes con historia",
-    image: "https://images.unsplash.com/photo-1578301978693-85fa9c0320b9?auto=format&fit=crop&w=900&q=85",
-  },
-  {
-    id: 10,
-    title: "Mesa tallada",
-    category: "Muebles",
-    image: "https://images.unsplash.com/photo-1567016432779-094069958ea5?auto=format&fit=crop&w=900&q=85",
-  },
-]
-
-function NewProductsCarousel() {
+function NewProductsCarousel({ products = [], loading = false }) {
   const { t } = useLocalization()
   const trackRef = useRef(null)
+  const items = Array.isArray(products) ? products.map(normalizeNewProduct).filter((product) => product.id) : []
+
+  if (loading) return <NewProductsSkeleton title={t("newProducts")} />
+  if (!items.length) return null
 
   function scrollProducts(direction) {
     const track = trackRef.current
@@ -97,16 +38,16 @@ function NewProductsCarousel() {
         </button>
 
         <div className="new-products__track" ref={trackRef}>
-          {NEW_PRODUCTS.map((product) => (
+          {items.map((product) => (
             <article className="new-products__item" key={product.id}>
-              <Link className="new-products__image-link" to={`/productos?search=${encodeURIComponent(product.title)}`}>
+              <Link className="new-products__image-link" to={product.url}>
                 <img src={product.image} alt={product.title} loading="lazy" />
               </Link>
 
               <div className="new-products__copy">
                 <p>{product.category}</p>
                 <h3>{product.title}</h3>
-                <Link to={`/productos?search=${encodeURIComponent(product.title)}`}>
+                <Link to={product.url}>
                   {t("shopCollection")}
                 </Link>
               </div>
@@ -125,6 +66,39 @@ function NewProductsCarousel() {
       </div>
     </section>
   )
+}
+
+function NewProductsSkeleton({ title }) {
+  return (
+    <section className="new-products" aria-busy="true" aria-labelledby="new-products-title">
+      <div className="new-products__header">
+        <h2 id="new-products-title">{title}</h2>
+      </div>
+      <div className="new-products__track" aria-hidden="true">
+        {Array.from({ length: 4 }).map((_, index) => (
+          <article className="new-products__item new-products__item--skeleton" key={index}>
+            <span className="new-products__skeleton-image" />
+            <span className="new-products__skeleton-line is-short" />
+            <span className="new-products__skeleton-line" />
+            <span className="new-products__skeleton-line is-link" />
+          </article>
+        ))}
+      </div>
+    </section>
+  )
+}
+
+function normalizeNewProduct(product = {}) {
+  const title = product.title || product.name || "Producto"
+  const slug = product.slug || ""
+
+  return {
+    id: product.id || slug || "",
+    title,
+    category: product.category?.name || product.category || "Nueva pieza",
+    image: product.image_url || product.image || "",
+    url: slug ? `/producto/${slug}` : `/productos?search=${encodeURIComponent(title)}`,
+  }
 }
 
 export default NewProductsCarousel

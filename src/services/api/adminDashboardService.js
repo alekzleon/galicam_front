@@ -5,6 +5,11 @@ export async function getAdminDashboard(params = {}) {
   return data
 }
 
+export async function getAdminMarketplaceDashboard(params = {}) {
+  const { data } = await api.get("/admin/dashboard/marketplace", { params })
+  return data
+}
+
 export async function getAdminSalesChannelsDashboard(params = {}) {
   const { data } = await api.get("/admin/dashboard/sales-channels", { params })
   return data

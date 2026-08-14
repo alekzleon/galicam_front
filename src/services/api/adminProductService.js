@@ -36,6 +36,11 @@ export async function updateAdminProductStatus(productId, isActive) {
   return data
 }
 
+export async function updateAdminProductRegionalCatalog(productId, payload) {
+  const { data } = await api.patch(`/admin/products/${productId}/regional-catalog`, payload)
+  return data
+}
+
 export async function deleteAdminProduct(productId) {
   const { data } = await api.delete(`/admin/products/${productId}`)
   return data

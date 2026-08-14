@@ -45,6 +45,7 @@ import { getAdminCategories } from "../../../services/api/adminCategoryService.j
 import { getAdminFamilies } from "../../../services/api/adminFamilyService.js"
 import { notifyError, notifySuccess } from "../../../utils/toast.js"
 import { normalizeMediaUrl } from "../../../utils/mediaUrl.js"
+import { useAuth } from "../../../context/AuthContext.jsx"
 import useAdminLocalization from "../../hooks/useAdminLocalization.js"
 import {
   appendTranslationsToFormData,
@@ -150,7 +151,10 @@ const SALES_CHANNEL_LINKS = [
   { channel: "tiktok", label: "TikTok", icon: "bi-tiktok", className: "is-tiktok" },
 ]
 
+const REGIONAL_ADMIN_ROLE = "centro_regional_admin"
+
 function ProductsPage() {
+  const { user } = useAuth()
   const [products, setProducts] = useState([])
   const [loading, setLoading] = useState(false)
   const [actionLoadingId, setActionLoadingId] = useState(null)
@@ -214,6 +218,7 @@ function ProductsPage() {
   const imagePreviewUrlRef = useRef("")
   const galleryPreviewUrlRef = useRef("")
   const gallerySaveTimersRef = useRef({})
+  const isRegionalAdmin = String(user?.role?.name || "").toLowerCase() === REGIONAL_ADMIN_ROLE
 
   useEffect(() => {
     return () => {
@@ -2233,6 +2238,11 @@ function ProductsPage() {
   }
 
   function openBulkImportPanel() {
+    if (isRegionalAdmin) {
+      notifyError("La carga masiva no está disponible para administradores regionales.")
+      return
+    }
+
     setBulkImportOpen(true)
   }
 
@@ -2418,10 +2428,12 @@ function ProductsPage() {
         subtitle="Listado general de productos registrados"
         right={
           <div className="product-page__header-actions">
-            <button type="button" className="btn btn-outline-primary" onClick={openBulkImportPanel}>
-              <i className="bi bi-file-earmark-spreadsheet" aria-hidden="true" />{" "}
-              Carga masiva
-            </button>
+            {!isRegionalAdmin ? (
+              <button type="button" className="btn btn-outline-primary" onClick={openBulkImportPanel}>
+                <i className="bi bi-file-earmark-spreadsheet" aria-hidden="true" />{" "}
+                Carga masiva
+              </button>
+            ) : null}
             <button type="button" className="btn btn-primary" onClick={handleOpenCreatePanel}>
               <i className="bi bi-plus-lg" aria-hidden="true" />{" "}
               Nuevo producto

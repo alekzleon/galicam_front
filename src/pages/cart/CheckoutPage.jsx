@@ -45,6 +45,7 @@ const emptyCheckout = {
   items_count: 0,
   items: [],
   promotions_applied: [],
+  regional_splits: [],
   invoice_preview: {
     document_type: "checkout_preview",
     currency: "MXN",
@@ -364,7 +365,12 @@ function CheckoutPage() {
       const stripeResponse = await createStripeCheckoutSession({
         order_id: order.id,
       })
-      const stripeUrl = stripeResponse?.data?.url
+      const stripePayload = stripeResponse?.data || stripeResponse || {}
+      const stripeUrl = stripePayload.url
+
+      if (stripePayload.marketplace && DEBUG_RECOVERABLE_CART) {
+        console.log("[marketplace-checkout][stripe-session]:", stripePayload.marketplace)
+      }
 
       if (!stripeUrl) {
         notifyError(t("checkoutStripeUrlError"))
@@ -672,6 +678,15 @@ function CheckoutPage() {
                               {item.selected_attributes.length ? (
                                 <small>{formatSelectedAttributes(item.selected_attributes)}</small>
                               ) : null}
+                              {item.regional_catalog?.region_name || item.regional_catalog?.region_slug ? (
+                                <small className="checkout_regional_note">
+                                  {t("cartRegionalSource", {
+                                    region:
+                                      item.regional_catalog.region_name ||
+                                      item.regional_catalog.region_slug,
+                                  })}
+                                </small>
+                              ) : null}
                               {item.promotion ? (
                                 <small>
                                   {t("cartAppliedPromotion")}:{" "}
@@ -851,6 +866,7 @@ function CheckoutPage() {
                 onAcceptedTermsChange={setAcceptedTerms}
                 loyalty={checkout.loyalty}
                 coupon={checkout.coupon || totals.coupon}
+                regionalSplits={checkout.regional_splits}
                 insufficientStockBlockers={insufficientStockBlockers}
                 invalidStockItems={invalidStockItems}
                 t={t}
@@ -1031,6 +1047,7 @@ function InvoiceSummary({
   onAcceptedTermsChange,
   loyalty,
   coupon,
+  regionalSplits = [],
   insufficientStockBlockers = [],
   invalidStockItems = [],
   t,
@@ -1082,6 +1099,8 @@ function InvoiceSummary({
       </div>
 
       <CheckoutLoyaltySummary loyalty={loyalty} t={t} />
+
+      <RegionalSplitsSummary splits={regionalSplits} t={t} />
 
       {hasPendingGiftSelection ? (
         <p className="checkout_muted">
@@ -1185,6 +1204,42 @@ function CheckoutLoyaltySummary({ loyalty, t }) {
   )
 }
 
+function RegionalSplitsSummary({ splits = [], t }) {
+  if (!Array.isArray(splits) || !splits.length) return null
+
+  return (
+    <section className="checkout_regional_summary">
+      <div className="checkout_regional_summary_head">
+        <strong>{t("cartRegionalSplitsTitle")}</strong>
+        <span>{t("cartRegionalSplitsText")}</span>
+      </div>
+
+      {splits.map((split) => (
+        <article className="checkout_regional_split" key={split.region_id || split.region_slug}>
+          <div>
+            <strong>{split.region_name || split.region_slug || "Regional"}</strong>
+            <span>{t("itemsCount", { count: split.items_count })}</span>
+          </div>
+          <dl>
+            <div>
+              <dt>{t("subtotal")}</dt>
+              <dd>{formatMoney(split.subtotal)}</dd>
+            </div>
+            <div>
+              <dt>{t("commissionEstimated")}</dt>
+              <dd>{formatMoney(split.commission_amount)}</dd>
+            </div>
+            <div>
+              <dt>{t("netEstimated")}</dt>
+              <dd>{formatMoney(split.net_amount)}</dd>
+            </div>
+          </dl>
+        </article>
+      ))}
+    </section>
+  )
+}
+
 function normalizeCheckout(response) {
   const data = response?.data || response || emptyCheckout
 
@@ -1209,6 +1264,9 @@ function normalizeCheckout(response) {
           snapshot: promotion.snapshot ?? {},
         }))
       : [],
+    regional_splits: normalizeRegionalSplits(
+      data.regional_splits ?? data.regionalSplits ?? data.metadata?.regional_splits
+    ),
     invoice_preview: {
       ...emptyCheckout.invoice_preview,
       ...(data.invoice_preview || {}),
@@ -1276,6 +1334,10 @@ function normalizeCheckoutItem(item = {}) {
           snapshot: item.promotion.snapshot ?? {},
         }
       : null,
+    regional_catalog: normalizeRegionalCatalog(
+      item.regional_catalog ?? item.metadata?.regional_catalog
+    ),
+    marketplace: normalizeMarketplaceSnapshot(item.marketplace ?? item.metadata?.marketplace),
   }
 }
 
@@ -1688,6 +1750,47 @@ function normalizeTaxBreakdown(taxBreakdown) {
       taxes: normalizeTaxes(item.taxes),
     })),
   }
+}
+
+function normalizeRegionalCatalog(value) {
+  if (!value || typeof value !== "object") return null
+
+  return {
+    region_id: value.region_id ?? null,
+    region_name: value.region_name || "",
+    region_slug: value.region_slug || "",
+    price: Number(value.price ?? 0),
+    stock: value.stock === null || value.stock === undefined ? null : Number(value.stock),
+    commission_rate: Number(value.commission_rate ?? 0),
+  }
+}
+
+function normalizeMarketplaceSnapshot(value) {
+  if (!value || typeof value !== "object") return null
+
+  return {
+    region_id: value.region_id ?? null,
+    commission_rate: Number(value.commission_rate ?? 0),
+    commission_amount: Number(value.commission_amount ?? 0),
+    net_amount: Number(value.net_amount ?? 0),
+    line_total: Number(value.line_total ?? 0),
+  }
+}
+
+function normalizeRegionalSplits(splits) {
+  if (!Array.isArray(splits)) return []
+
+  return splits
+    .filter(Boolean)
+    .map((split) => ({
+      region_id: split.region_id ?? null,
+      region_name: split.region_name || "",
+      region_slug: split.region_slug || "",
+      items_count: Number(split.items_count ?? 0),
+      subtotal: Number(split.subtotal ?? 0),
+      commission_amount: Number(split.commission_amount ?? 0),
+      net_amount: Number(split.net_amount ?? 0),
+    }))
 }
 
 function formatGiftItemsText(giftItems = [], giftItemUnits = 0, t) {

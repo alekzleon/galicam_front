@@ -10,6 +10,7 @@ import ProductsPage from "../pages/ProductsPage/ProductsPage"
 import CategoriesPage from "../pages/CategoriesPage/CategoriesPage"
 import FamiliesPage from "../pages/FamiliesPage/FamiliesPage"
 import RegionsPage from "../pages/RegionsPage/RegionsPage"
+import RegionDetailPage from "../pages/RegionsPage/RegionDetailPage"
 import MarketingPage from "../pages/MarketingPage/MarketingPage"
 import PromotionsPage from "../pages/PromotionsPage/PromotionsPage"
 import GiftItemsPage from "../pages/PromotionsPage/GiftItemsPage"
@@ -64,6 +65,10 @@ function AdminRoutes({
           <Route
             path="/catalog/regions"
             element={withModule(currentUser, ["regiones", "regions", "region", "categorias", "familias", "productos"], <RegionsPage />)}
+          />
+          <Route
+            path="/catalog/regions/:regionId"
+            element={withModule(currentUser, ["regiones", "regions", "region", "categorias", "familias", "productos"], <RegionDetailPage />)}
           />
           <Route path="/orders" element={withModule(currentUser, ["pedidos", "carritos"], <OrdersPage />)} />
           <Route path="/credit" element={withModule(currentUser, "credito", <CreditPage />)} />

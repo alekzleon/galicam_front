@@ -36,6 +36,9 @@ function RegionPage() {
   const [loading, setLoading] = useState(true)
   const sort = searchParams.get("sort") || ""
   const page = Number(searchParams.get("page") || 1)
+  const productLinkSearch = useMemo(() => (
+    region?.slug ? `?region_slug=${encodeURIComponent(region.slug)}` : ""
+  ), [region?.slug])
 
   useEffect(() => {
     let mounted = true
@@ -53,7 +56,7 @@ function RegionPage() {
         if (!mounted) return
 
         setRegion(normalizeRegion(payload.region || payload))
-        setProducts(normalizeProducts(payload.products || []))
+        setProducts(normalizeProducts(payload.products || [], payload.region || payload))
         setMeta({
           current_page: Number(response?.meta?.current_page || page),
           last_page: Number(response?.meta?.last_page || 1),
@@ -152,7 +155,7 @@ function RegionPage() {
           ) : products.length ? (
             <div className="region-page__grid">
               {products.map((product) => (
-                <ProductCard key={product.id} product={product} />
+                <ProductCard key={product.id} product={product} productLinkSearch={productLinkSearch} />
               ))}
             </div>
           ) : (
@@ -188,7 +191,7 @@ function normalizeRegion(value = {}) {
   }
 }
 
-function normalizeProducts(items = []) {
+function normalizeProducts(items = [], region = {}) {
   return items.map((item) => {
     const price = Number(item?.default_price ?? item?.price ?? 0)
     const activePromotions = Array.isArray(item?.active_promotions) ? item.active_promotions : []
@@ -222,6 +225,9 @@ function normalizeProducts(items = []) {
       stockStatus: item?.stock_status ?? "untracked",
       stockMessage: item?.stock_message ?? "",
       isFavorite: Boolean(item?.is_favorite),
+      regionalCatalog: item?.regional_catalog ?? null,
+      regionId: item?.regional_catalog?.region_id ?? region?.id ?? null,
+      regionSlug: item?.regional_catalog?.region_slug ?? region?.slug ?? "",
     }
   })
 }

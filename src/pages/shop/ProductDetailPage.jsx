@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useRef, useState } from "react"
-import { useParams, Link, useNavigate } from "react-router-dom"
+import { useParams, Link, useNavigate, useSearchParams } from "react-router-dom"
 import { getProductDetail } from "../../services/api/productService"
 import { addCartItem } from "../../services/api/cartService"
 import { toggleAccountFavorite } from "../../services/api/accountService"
@@ -19,6 +19,7 @@ const PRICE_UNAVAILABLE_SOURCE = "precios_articulos_default_missing"
 
 function ProductDetailPage() {
   const { slug } = useParams()
+  const [searchParams] = useSearchParams()
   const navigate = useNavigate()
   const { isAuthenticated, sessionReady } = useAuth()
   const { locale, t } = useLocalization()
@@ -178,12 +179,19 @@ function ProductDetailPage() {
     product.variantOptions.every((option) => selectedAttributeValueIds[option.attribute.id])
   const missingVariantSelection = hasVariantAttributes && !hasSelectedAllVariantAttributes
   const isEditorialShop = settings.storefront?.active_template === "editorial_shop"
+  const regionSlugParam = searchParams.get("region_slug") || ""
+  const regionIdParam = searchParams.get("region_id") || ""
 
   useEffect(() => {
     const fetchProduct = async () => {
       try {
         setLoading(true)
-        const response = await getProductDetail(slug)
+        const regionalParams = {}
+
+        if (regionSlugParam) regionalParams.region_slug = regionSlugParam
+        if (regionIdParam) regionalParams.region_id = regionIdParam
+
+        const response = await getProductDetail(slug, regionalParams)
         setProductData(response.data)
         setIsFavorite(Boolean(response.data?.is_favorite))
       } catch (error) {
@@ -196,7 +204,7 @@ function ProductDetailPage() {
     }
 
     fetchProduct()
-  }, [currency, locale, slug])
+  }, [currency, locale, regionIdParam, regionSlugParam, slug])
 
   useEffect(() => {
     if (product?.mediaItems?.length) {
@@ -289,6 +297,7 @@ function ProductDetailPage() {
       const payload = {
         product_id: product.id,
         quantity,
+        ...buildRegionalCartContext(regionIdParam, regionSlugParam),
         ...(hasVariantAttributes
           ? { attribute_value_ids: Object.values(selectedAttributeValueIds).map(Number).filter(Boolean) }
           : {}),
@@ -1360,6 +1369,13 @@ function buildPromotionMessages(promotions = []) {
     })
     .map((message) => String(message).trim())
     .filter(Boolean)
+}
+
+function buildRegionalCartContext(regionId, regionSlug) {
+  if (regionId) return { region_id: Number(regionId) }
+  if (regionSlug) return { region_slug: regionSlug }
+
+  return {}
 }
 
 function formatStockMessage(status, t) {

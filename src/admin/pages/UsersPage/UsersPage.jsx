@@ -14,11 +14,14 @@ import "./UsersPage.css"
 
 const INITIAL_FORM = {
   role_id: "",
+  region_id: "",
   name: "",
   username: "",
   email: "",
   password: "",
 }
+
+const REGIONAL_ROLE_NAMES = new Set(["centro_regional_admin"])
 
 const DEFAULT_SORT_OPTIONS = [
   { value: "latest", label: "Más recientes" },
@@ -32,6 +35,7 @@ const DEFAULT_SORT_OPTIONS = [
 function UsersPage() {
   const [users, setUsers] = useState([])
   const [roles, setRoles] = useState([])
+  const [regions, setRegions] = useState([])
   const [sortOptions, setSortOptions] = useState(DEFAULT_SORT_OPTIONS)
   const [loading, setLoading] = useState(false)
   const [optionsLoading, setOptionsLoading] = useState(false)
@@ -75,9 +79,10 @@ function UsersPage() {
     try {
       setOptionsLoading(true)
       const response = await getAdminUserFormOptions()
-      const data = response?.data || {}
+      const data = response?.data || response || {}
 
       setRoles(Array.isArray(data.roles) ? data.roles : [])
+      setRegions(Array.isArray(data.regions) ? data.regions : [])
       setSortOptions(
         Array.isArray(data.sort_options) && data.sort_options.length
           ? data.sort_options
@@ -177,6 +182,7 @@ function UsersPage() {
 
       setForm({
         role_id: user.role_id ?? user.role?.id ?? "",
+        region_id: user.region_id ?? user.region?.id ?? "",
         name: user.name || "",
         username: user.username || "",
         email: user.email || "",
@@ -203,15 +209,33 @@ function UsersPage() {
 
   function handleFormChange(event) {
     const { name, value } = event.target
-    setForm((prev) => ({ ...prev, [name]: value }))
+
+    setForm((prev) => {
+      const nextForm = { ...prev, [name]: value }
+
+      if (name === "role_id" && !isRegionalRole(getRoleById(value))) {
+        nextForm.region_id = ""
+      }
+
+      return nextForm
+    })
   }
 
   function buildPayload() {
+    const selectedRole = getRoleById(form.role_id)
     const payload = {
       role_id: Number(form.role_id),
       name: form.name.trim(),
       username: form.username.trim(),
       email: form.email.trim(),
+    }
+
+    if (isRegionalRole(selectedRole)) {
+      payload.region_id = Number(form.region_id)
+    } else if (form.region_id) {
+      payload.region_id = Number(form.region_id)
+    } else {
+      payload.region_id = null
     }
 
     if (form.password.trim()) {
@@ -222,6 +246,8 @@ function UsersPage() {
   }
 
   function validatePayload(payload) {
+    const selectedRole = getRoleById(payload.role_id)
+
     if (!payload.role_id) {
       notifyWarning("Selecciona un rol para el usuario.")
       return false
@@ -232,12 +258,21 @@ function UsersPage() {
       return false
     }
 
+    if (isRegionalRole(selectedRole) && !payload.region_id) {
+      notifyWarning("Selecciona la región para el administrador regional.")
+      return false
+    }
+
     if (panelMode === "create" && !form.password.trim()) {
       notifyWarning("La contraseña es obligatoria al crear un usuario.")
       return false
     }
 
     return true
+  }
+
+  function getRoleById(roleId) {
+    return roles.find((role) => String(role.id) === String(roleId)) || null
   }
 
   async function handleSubmit(event) {
@@ -462,6 +497,7 @@ function UsersPage() {
                   <th>Usuario</th>
                   <th>Correo</th>
                   <th>Rol</th>
+                  <th>Región</th>
                   <th>Verificado</th>
                   <th>Interno</th>
                   <th>Creado</th>
@@ -471,13 +507,13 @@ function UsersPage() {
               <tbody>
                 {loading ? (
                   <tr>
-                    <td colSpan="9" className="text-center py-4">
+                    <td colSpan="10" className="text-center py-4">
                       Cargando información...
                     </td>
                   </tr>
                 ) : users.length === 0 ? (
                   <tr>
-                    <td colSpan="9" className="text-center py-4">
+                    <td colSpan="10" className="text-center py-4">
                       No se encontraron usuarios.
                     </td>
                   </tr>
@@ -507,6 +543,16 @@ function UsersPage() {
                             </span>
                             {role.description ? <small>{role.description}</small> : null}
                           </div>
+                        </td>
+                        <td>
+                          {user.region ? (
+                            <div className="user-page__region">
+                              <strong>{user.region.name}</strong>
+                              <span>{user.region.slug}</span>
+                            </div>
+                          ) : (
+                            <span className="text-muted">-</span>
+                          )}
                         </td>
                         <td>
                           <span className={`badge text-bg-${user.email_verified_at ? "success" : "warning"}`}>
@@ -639,6 +685,34 @@ function UsersPage() {
                   </select>
                 </div>
 
+                <div className="col-12 col-md-6">
+                  <label className="form-label">
+                    Región {isRegionalRole(getRoleById(form.role_id)) ? <span className="text-danger">*</span> : null}
+                  </label>
+                  <select
+                    name="region_id"
+                    className="form-select"
+                    value={form.region_id}
+                    onChange={handleFormChange}
+                    disabled={optionsLoading || !isRegionalRole(getRoleById(form.role_id))}
+                  >
+                    <option value="">
+                      {isRegionalRole(getRoleById(form.role_id))
+                        ? "Selecciona una región"
+                        : "No aplica"}
+                    </option>
+                    {regions.map((region) => (
+                      <option key={region.id} value={region.id}>
+                        {region.name}
+                        {region.is_active === false ? " (inactiva)" : ""}
+                      </option>
+                    ))}
+                  </select>
+                  <small className="user-detail__field-help">
+                    Requerida para usuarios con rol centro regional admin.
+                  </small>
+                </div>
+
                 <div className="col-12">
                   <label className="form-label">
                     {panelMode === "create" ? "Contraseña" : "Nueva contraseña"}
@@ -667,7 +741,13 @@ function UsersPage() {
                 <div className="user-detail__stat">
                   <span className="user-detail__stat-label">Rol seleccionado</span>
                   <strong className="user-detail__stat-value">
-                    {roles.find((role) => String(role.id) === String(form.role_id))?.display_name || "-"}
+                    {getRoleById(form.role_id)?.display_name || getRoleById(form.role_id)?.name || "-"}
+                  </strong>
+                </div>
+                <div className="user-detail__stat">
+                  <span className="user-detail__stat-label">Región asignada</span>
+                  <strong className="user-detail__stat-value">
+                    {regions.find((region) => String(region.id) === String(form.region_id))?.name || "-"}
                   </strong>
                 </div>
               </div>
@@ -677,6 +757,12 @@ function UsersPage() {
       </AdminSidePanel>
     </>
   )
+}
+
+function isRegionalRole(role) {
+  if (!role) return false
+
+  return REGIONAL_ROLE_NAMES.has(String(role.name || "").toLowerCase())
 }
 
 function formatDate(value) {
